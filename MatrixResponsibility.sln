@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixResponsibility", "MatrixResponsibility\MatrixResponsibility.csproj", "{457188AF-5939-4D40-859D-96F42AA65595}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixResponsibility.Common", "MatrixResponsibility.Common\MatrixResponsibility.Common.csproj", "{B2245BBA-B747-48C0-812C-951D10553995}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{754FC069-D67B-A9D7-50A1-8D1CA196D8F1}"
+	ProjectSection(SolutionItems) = preProject
+		api.yml = api.yml
+		testdb.yml = testdb.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{457188AF-5939-4D40-859D-96F42AA65595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{457188AF-5939-4D40-859D-96F42AA65595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{457188AF-5939-4D40-859D-96F42AA65595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{457188AF-5939-4D40-859D-96F42AA65595}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2245BBA-B747-48C0-812C-951D10553995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2245BBA-B747-48C0-812C-951D10553995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2245BBA-B747-48C0-812C-951D10553995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2245BBA-B747-48C0-812C-951D10553995}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8F1BAC33-E5FD-4523-8C8B-2C61AE0D653C}
+	EndGlobalSection
+EndGlobal
