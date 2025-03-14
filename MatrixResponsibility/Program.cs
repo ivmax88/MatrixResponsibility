@@ -17,10 +17,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("AllowAll", b =>
+    {
+        b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // ѕрименение миграций с логированием
 updatedatabase();
+
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
