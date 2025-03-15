@@ -161,7 +161,3 @@ void updatedatabase()
     }
 }
 
-static void AddDbContext(WebApplicationBuilder builder)
-{
- 
-}
