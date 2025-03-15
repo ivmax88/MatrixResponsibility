@@ -1,5 +1,7 @@
+using MatrixResponsibility.Common.Constants;
 using MatrixResponsibility.Common.Interafaces;
 using MatrixResponsibility.Data;
+using MatrixResponsibility.Hubs;
 using MatrixResponsibility.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,7 @@ builder.Services.AddHttpClient<ILDAPAuthenticationService,LDAPAuthenticationServ
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 #region jwt
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -60,6 +63,23 @@ builder.Services.AddAuthentication(options =>
         OnTokenValidated = context =>
         {
             Console.WriteLine("Token validated successfully");
+            return Task.CompletedTask;
+        }
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query[str.access_token];
+
+            // если запрос направлен хабу
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                // получаем токен из строки запроса
+                context.Token = accessToken;
+            }
             return Task.CompletedTask;
         }
     };
@@ -130,6 +150,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<MainHub>("/hubs/main");
 
 app.Run();
 
