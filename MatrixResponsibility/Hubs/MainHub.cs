@@ -13,11 +13,8 @@ namespace MatrixResponsibility.Hubs
 
         public MainHub(AppDbContext appDbContext)
         {
-            this.appDbContext=appDbContext;
         }
-        public async Task<IEnumerable<User>> Get()
         {
-            return await appDbContext.Users.ToListAsync(Context.ConnectionAborted);
         }
     }
 }
