@@ -34,7 +34,9 @@ namespace MatrixResponsibility.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    login = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                    login = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    fio = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -217,11 +219,11 @@ namespace MatrixResponsibility.Migrations
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "Id", "login" },
+                columns: new[] { "Id", "email", "fio", "login" },
                 values: new object[,]
                 {
-                    { 1, "ivanov" },
-                    { 2, "tsarev" }
+                    { 1, "", "", "ivanov" },
+                    { 2, "", "", "tsarev" }
                 });
 
             migrationBuilder.InsertData(

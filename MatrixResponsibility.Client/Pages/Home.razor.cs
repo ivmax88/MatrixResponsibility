@@ -33,7 +33,7 @@ namespace MatrixResponsibility.Client.Pages
             });
 
             await connection.StartAsync();
-            users = await connection.InvokeAsync<IEnumerable<User>>("Get");
+            //users = await connection.InvokeAsync<IEnumerable<User>>("Get");
         }
     }
 }

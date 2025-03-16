@@ -18,12 +18,27 @@ namespace MatrixResponsibility.Common
         public int Id { get; set; }
 
         /// <summary>
-        /// Логин пользователя (совпадает с логином в АД, все остальные данные (ФИО, почта)"на лету" должны браться из АД).
+        /// Логин пользователя.
         /// </summary>
         [Column("login")]
         [MaxLength(50)]
         public string Login { get; set; } = string.Empty;
 
+        /// <summary>
+        /// ФИО пользователя.
+        /// </summary>
+        [Column("fio")]
+        [MaxLength(100)]
+        public string FIO { get; set; } = string.Empty;
+
+
+        /// <summary>
+        /// Email пользователя.
+        /// </summary>
+        [Column("email")]
+        [MaxLength(100)]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
 
 
         /// <summary>

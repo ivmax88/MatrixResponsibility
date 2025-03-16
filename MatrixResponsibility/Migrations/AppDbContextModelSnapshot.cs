@@ -323,6 +323,18 @@ namespace MatrixResponsibility.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Enail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FIO")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("fio");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -337,11 +349,15 @@ namespace MatrixResponsibility.Migrations
                         new
                         {
                             Id = 1,
+                            Enail = "",
+                            FIO = "",
                             Login = "ivanov"
                         },
                         new
                         {
                             Id = 2,
+                            Enail = "",
+                            FIO = "",
                             Login = "tsarev"
                         });
                 });
