@@ -1,15 +1,91 @@
 ﻿@page "/"
 @attribute [Authorize]
+@inherits ApplicationComponentBase
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Список проектов</h1>
 
-@if (users != null)
+
+
+@if (projects == null)
 {
-    @foreach (var u in users)
-    {
-        <p>
-            @u.Id - @u.Login
-        </p>
-    }
+    <p><em>Загрузка...</em></p>
+}
+else if (!projects.Any())
+{
+    <p><em>Нет доступных проектов.</em></p>
+}
+else
+{
+    <div style="overflow-x: auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название проекта</th>
+                    <th>Название (внутреннее)</th>
+                    <th>Маркетинговое название</th>
+                    <th>Адрес объекта</th>
+                    <th>Архитектурное бюро</th>
+                    <th>Заказчик</th>
+                    <th>Главный инженер (GIP)</th>
+                    <th>Помощник GIP</th>
+                    <th>Главный архитектор (GAP)</th>
+                    <th>Главный конструктор (GKP)</th>
+                    <th>Генеральный проектировщик (GP)</th>
+                    <th>Электрооборудование и механика (EOM)</th>
+                    <th>Слаботочные системы (SS)</th>
+                    <th>Автоматизация и контроль (AK)</th>
+                    <th>Ответственный</th>
+                    <th>Бюро комплексного проектирования (BKP)</th>
+                    <th>Общая площадь</th>
+                    <th>Продаваемая площадь</th>
+                    <th>Дата ГПЗУ</th>
+                    <th>Дата начала ПД</th>
+                    <th>Дата положительного заключения</th>
+                    <th>Дата начала РД</th>
+                    <th>Дата окончания РД</th>
+                    <th>Письмо разрешения старта</th>
+                    <th>Статус отчета</th>
+                    <th>Внутреннее совещание</th>
+                    <th>Корректировки</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var project in projects)
+                {
+                    <tr>
+                        <td>@project.Id</td>
+                        <td>@project.ProjectName</td>
+                        <td>@project.Name</td>
+                        <td>@project.MarketingName</td>
+                        <td>@project.ObjectAddress</td>
+                        <td>@project.AB</td>
+                        <td>@project.Customer</td>
+                        <td>@(project.GIP?.Login ?? "Не назначен") (ID: @(project.GIPId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.AssistantGIP?.Login ?? "Не назначен") (ID: @(project.AssistantGIPId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.GAP?.Login ?? "Не назначен") (ID: @(project.GAPId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.GKP?.Login ?? "Не назначен") (ID: @(project.GKPId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.GP?.Login ?? "Не назначен") (ID: @(project.GPId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.EOM?.Login ?? "Не назначен") (ID: @(project.EOMId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.SS?.Login ?? "Не назначен") (ID: @(project.SSId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.AK?.Login ?? "Не назначен") (ID: @(project.AKId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.Responsible?.Login ?? "Не назначен") (ID: @(project.ResponsibleId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.BKP?.Id.ToString() ?? "Не назначен")</td>
+                        <td>@(project.TotalArea?.ToString("N2") ?? "N/A")</td>
+                        <td>@(project.SaleableArea?.ToString("N2") ?? "N/A")</td>
+                        <td>@(project.GPZUDate?.ToString("dd.MM.yyyy") ?? "N/A")</td>
+                        <td>@(project.DateStartPD?.ToString("dd.MM.yyyy") ?? "N/A")</td>
+                        <td>@(project.DateFirstApproval?.ToString("dd.MM.yyyy") ?? "N/A")</td>
+                        <td>@(project.DateStartRD?.ToString("dd.MM.yyyy") ?? "N/A")</td>
+                        <td>@(project.DateEndRD?.ToString("dd.MM.yyyy") ?? "N/A")</td>
+                        <td>@project.StartPermissionLetter</td>
+                        <td>@project.ReportStatus</td>
+                        <td>@project.InternalMeeting</td>
+                        <td>@(project.Corrections != null ? project.Corrections.Count : 0)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }

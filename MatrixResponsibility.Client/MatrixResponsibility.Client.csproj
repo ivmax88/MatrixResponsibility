@@ -22,8 +22,4 @@
     <ProjectReference Include="..\MatrixResponsibility.Common\MatrixResponsibility.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

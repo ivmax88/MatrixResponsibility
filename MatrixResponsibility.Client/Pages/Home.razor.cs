@@ -1,39 +1,47 @@
-﻿using Blazored.LocalStorage;
+﻿using MatrixResponsibility.Client.Services;
 using MatrixResponsibility.Common;
-using MatrixResponsibility.Common.Constants;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.SignalR.Client;
+using System.Linq;
 
 namespace MatrixResponsibility.Client.Pages
 {
     public partial class Home
     {
-        private HubConnection connection;
-        string message;
-        private IEnumerable<User> users;
+        [Inject] public MainHubService MainHubService { get; set; }
 
-        [Inject] public ILocalStorageService? localStorage { get; set; }
-        protected override async Task OnInitializedAsync()
+        private List<Project>? projects;
+
+        protected override async Task InitializeAsync(CancellationToken cancellationToken)
         {
-            if (localStorage==null)
-                return;
+            MainHubService.OnProjectChangedAsync += HandleProjectChangedAsync;
+            await MainHubService.InitializeAsync(cancellationToken);
 
-            var token = await localStorage.GetItemAsync<string>(str.jwttoken);
-            connection = new HubConnectionBuilder()
-                .WithUrl($"http://localhost:5102/hubs/main?{str.access_token}={token}", async opt =>
-                {
+            projects = await MainHubService.GetAllProjects(cancellationToken);
+        }
 
-                })
-                .Build();
-
-            // регистрируем функцию Receive для получения данных
-            connection.On<string>("all", (message) =>
+        private async Task HandleProjectChangedAsync(Project updatedProject)
+        {
+            if (projects != null)
             {
-                this.message = message;
-            });
+                var existingProject = projects.FirstOrDefault(p => p.Id == updatedProject.Id);
+                if (existingProject != null)
+                {
+                    var index = projects.IndexOf(existingProject);
+                    projects[index] = updatedProject;
+                }
+                else
+                {
+                    projects.Add(updatedProject);
+                }
+                await Task.Delay(1); // Даем UI возможность обновиться
+                await InvokeAsync(StateHasChanged);
+            }
+        }
 
-            await connection.StartAsync();
-            //users = await connection.InvokeAsync<IEnumerable<User>>("Get");
+        protected override async Task DisposeResourcesAsync()
+        {
+            MainHubService.OnProjectChangedAsync -= HandleProjectChangedAsync;
+            await MainHubService.StopAsync(CancellationToken);
         }
     }
 }

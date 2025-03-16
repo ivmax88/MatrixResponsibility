@@ -9,7 +9,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddLogging(l =>
+{
+    l.SetMinimumLevel(LogLevel.Information);
+});
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<MainHubService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
