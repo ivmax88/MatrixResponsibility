@@ -51,15 +51,32 @@ namespace MatrixResponsibility.Client.Services
         protected ClaimsPrincipal CreateClaimsPrincipalFromToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var identity = new ClaimsIdentity();
+            var identity = new ClaimsIdentity(); // Изначально пустая идентичность
 
-            if (tokenHandler.CanReadToken(token))
+            try
             {
-                var jwtSecurityToken = tokenHandler.ReadJwtToken(token);
-                identity = new ClaimsIdentity(jwtSecurityToken.Claims, "jwt");
+                if (tokenHandler.CanReadToken(token))
+                {
+                    var jwtSecurityToken = tokenHandler.ReadJwtToken(token);
+                    // Создаем ClaimsIdentity с указанием AuthenticationType
+                    identity = new ClaimsIdentity(jwtSecurityToken.Claims, "jwt");
+                    // Проверяем, есть ли минимальные claims для аутентификации
+                    if (!identity.Claims.Any(c => c.Type == ClaimTypes.Name))
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Name, "Unknown")); // Минимальный claim
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Token cannot be read.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error parsing JWT: {ex.Message}");
             }
 
-            return new(identity);
+            return new ClaimsPrincipal(identity);
         }
     }
 }
