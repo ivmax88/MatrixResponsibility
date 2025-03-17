@@ -5,7 +5,6 @@ using MatrixResponsibility.Hubs;
 using MatrixResponsibility.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -20,9 +19,10 @@ var connection = "Host=localhost;Port=5432;Database=matrix_db_test;Username=user
 builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connection));
 #endregion
 
+builder.Services.AddScoped<DataImportService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-builder.Services.AddHttpClient<ILDAPAuthenticationService,LDAPAuthenticationService>(client =>
+builder.Services.AddHttpClient<ILDAPAuthenticationService, LDAPAuthenticationService>(client =>
 {
     client.BaseAddress = new Uri(builder?.Configuration["LDAPSettings:Url"] ?? throw new NullReferenceException("LDAP url is null [LDAPSettings:Url]"));
     client.Timeout = TimeSpan.FromSeconds(30);
@@ -133,6 +133,25 @@ var app = builder.Build();
 
 // Применение миграций с логированием
 updatedatabase();
+
+bool.TryParse(app.Configuration["ImportData"] ?? "false", out bool flag);
+if (flag)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        // Получаем сервис из scope
+        var s = scope.ServiceProvider.GetService<DataImportService>();
+
+        // Используем сервис
+        if (s != null)
+        {
+            await s.ImportProjects(@"Data\Матрица ответственности ГП.xlsx");
+            await s.ImportAreasAndYers(@"Data\Счетчик положительных заключений.xlsx");
+        }
+    }
+}
+
+
 
 app.UseCors("AllowAll");
 

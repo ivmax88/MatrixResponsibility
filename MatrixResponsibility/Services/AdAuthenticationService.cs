@@ -1,4 +1,5 @@
 ﻿using MatrixResponsibility.Common;
+using MatrixResponsibility.Common.DTOs.Response;
 using MatrixResponsibility.Common.Interafaces;
 using System.Formats.Asn1;
 using System.Text.Json;
@@ -39,6 +40,17 @@ namespace MatrixResponsibility.Services
                 throw new Exception($"Не получилось получить данные по логину {username}");
             }
         }
+
+        public async Task<List<UserInfo>> GetAllSotrudniks()
+        {
+            var request = await httpClient.GetAsync("LDAPService/GetSotrudniks");
+            if(request.IsSuccessStatusCode)
+            {
+                return await request.Content.ReadFromJsonAsync<List<UserInfo>>() ?? [];
+            }
+            return [];
+        }
+
         record userinfo (string commonName, string email);
     }
 }

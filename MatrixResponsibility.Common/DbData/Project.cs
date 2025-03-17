@@ -26,6 +26,12 @@ namespace MatrixResponsibility.Common
         public string ProjectName { get; set; } = string.Empty;
 
         /// <summary>
+        /// Название объекта.
+        /// </summary>
+        [Column("isactive")]
+        public bool IsActive{ get; set; } = true;
+
+        /// <summary>
         /// Идентификатор главного инженера проекта.
         /// </summary>
         [Column("gip_id")]
@@ -163,13 +169,6 @@ namespace MatrixResponsibility.Common
         /// </summary>
         [Column("date_end_rd")]
         public DateTime? DateEndRD { get; set; }
-
-        /// <summary>
-        /// Наименование проекта.
-        /// </summary>
-        [Column("name")]
-        [MaxLength(255)]
-        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Общая площадь.

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MatrixResponsibility.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250315155137_Init")]
+    [Migration("20250317060529_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -169,16 +169,14 @@ namespace MatrixResponsibility.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("internal_meeting");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isactive");
+
                     b.Property<string>("MarketingName")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("marketing_name");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("name");
 
                     b.Property<string>("ObjectAddress")
                         .HasMaxLength(1000)
@@ -326,7 +324,7 @@ namespace MatrixResponsibility.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Enail")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
@@ -352,16 +350,37 @@ namespace MatrixResponsibility.Migrations
                         new
                         {
                             Id = 1,
-                            Enail = "",
-                            FIO = "",
+                            Email = "ivanov@olimproekt.ru",
+                            FIO = "Иванов Максим Леонидович",
                             Login = "ivanov"
                         },
                         new
                         {
                             Id = 2,
-                            Enail = "",
-                            FIO = "",
+                            Email = "tsarev@olimproekt.ru",
+                            FIO = "Царев Михаил Александрович",
                             Login = "tsarev"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "vladimir@olimproekt.ru",
+                            FIO = "Ковалёв Владимир Александрович",
+                            Login = "vladimir"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "empty@olimproekt.ru",
+                            FIO = "empty empty empty",
+                            Login = "empty"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Email = "not_found@olimproekt.ru",
+                            FIO = "not_found not_found not_found",
+                            Login = "not_found"
                         });
                 });
 
@@ -390,6 +409,11 @@ namespace MatrixResponsibility.Migrations
                         new
                         {
                             UserId = 2,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            UserId = 3,
                             RoleId = 1
                         });
                 });

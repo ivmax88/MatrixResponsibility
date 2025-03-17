@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using MatrixResponsibility.Common.DTOs.Response;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MatrixResponsibility.Common.Interafaces
 {
@@ -6,5 +8,6 @@ namespace MatrixResponsibility.Common.Interafaces
     {
         Task<bool> Validate(string username, string password);
         Task<(string email, string fio)> GetFioAndEmail(string username);
+        Task<List<UserInfo>> GetAllSotrudniks();
     }
 }

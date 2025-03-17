@@ -46,8 +46,11 @@ namespace MatrixResponsibility.Data
             {
                 // Начальные данные для пользователя
                 entity.HasData(
-                    new User { Id = 1,Login = "ivanov" },
-                    new User { Id = 2,Login = "tsarev" }
+                    new User { Id = 1,Login = "ivanov" , Email="ivanov@olimproekt.ru", FIO = "Иванов Максим Леонидович" },
+                    new User { Id = 2,Login = "tsarev" , Email="tsarev@olimproekt.ru", FIO = "Царев Михаил Александрович" },
+                    new User { Id = 3,Login = "vladimir", Email="vladimir@olimproekt.ru", FIO = "Ковалёв Владимир Александрович" },
+                    new User { Id = 4,Login = "empty", Email="empty@olimproekt.ru", FIO = "empty empty empty" },
+                    new User { Id = 5,Login = "not_found", Email="not_found@olimproekt.ru", FIO = "not_found not_found not_found" }
                 );
             });
 
@@ -98,7 +101,8 @@ namespace MatrixResponsibility.Data
                 // Начальные данные для связи пользователя и роли
                 entity.HasData(
                     new UserRole { UserId = 1, RoleId = 1 },
-                    new UserRole { UserId = 2, RoleId = 1 }
+                    new UserRole { UserId = 2, RoleId = 1 },
+                    new UserRole { UserId = 3, RoleId = 1 }
                 );
             });
 

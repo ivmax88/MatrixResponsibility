@@ -94,6 +94,7 @@ namespace MatrixResponsibility.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     project_name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    isactive = table.Column<bool>(type: "boolean", nullable: false),
                     gip_id = table.Column<int>(type: "integer", nullable: true),
                     assistant_gip_id = table.Column<int>(type: "integer", nullable: true),
                     gap_id = table.Column<int>(type: "integer", nullable: true),
@@ -116,7 +117,6 @@ namespace MatrixResponsibility.Migrations
                     date_first_approval = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     date_start_rd = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     date_end_rd = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     total_area = table.Column<double>(type: "double precision", nullable: true),
                     saleable_area = table.Column<double>(type: "double precision", nullable: true)
                 },
@@ -222,8 +222,11 @@ namespace MatrixResponsibility.Migrations
                 columns: new[] { "Id", "email", "fio", "login" },
                 values: new object[,]
                 {
-                    { 1, "", "", "ivanov" },
-                    { 2, "", "", "tsarev" }
+                    { 1, "ivanov@olimproekt.ru", "Иванов Максим Леонидович", "ivanov" },
+                    { 2, "tsarev@olimproekt.ru", "Царев Михаил Александрович", "tsarev" },
+                    { 3, "vladimir@olimproekt.ru", "Ковалёв Владимир Александрович", "vladimir" },
+                    { 4, "empty@olimproekt.ru", "empty empty empty", "empty" },
+                    { 5, "not_found@olimproekt.ru", "not_found not_found not_found", "not_found" }
                 });
 
             migrationBuilder.InsertData(
@@ -246,7 +249,8 @@ namespace MatrixResponsibility.Migrations
                 values: new object[,]
                 {
                     { 1, 1 },
-                    { 1, 2 }
+                    { 1, 2 },
+                    { 1, 3 }
                 });
 
             migrationBuilder.CreateIndex(
