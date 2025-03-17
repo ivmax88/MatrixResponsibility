@@ -23,7 +23,6 @@ else
                 <tr>
                     <th>ID</th>
                     <th>Название проекта</th>
-                    <th>Название (внутреннее)</th>
                     <th>Маркетинговое название</th>
                     <th>Адрес объекта</th>
                     <th>Архитектурное бюро</th>
@@ -57,20 +56,19 @@ else
                     <tr>
                         <td>@project.Id</td>
                         <td>@project.ProjectName</td>
-                        <td>@project.Name</td>
                         <td>@project.MarketingName</td>
-                        <td>@project.ObjectAddress</td>
+                        <td>@project.ObjectAddress?.Take(50)</td>
                         <td>@project.AB</td>
                         <td>@project.Customer</td>
-                        <td>@(project.GIP?.Login ?? "Не назначен") (ID: @(project.GIPId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.AssistantGIP?.Login ?? "Не назначен") (ID: @(project.AssistantGIPId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.GAP?.Login ?? "Не назначен") (ID: @(project.GAPId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.GKP?.Login ?? "Не назначен") (ID: @(project.GKPId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.GP?.Login ?? "Не назначен") (ID: @(project.GPId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.EOM?.Login ?? "Не назначен") (ID: @(project.EOMId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.SS?.Login ?? "Не назначен") (ID: @(project.SSId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.AK?.Login ?? "Не назначен") (ID: @(project.AKId?.ToString() ?? "N/A"))</td>
-                        <td>@(project.Responsible?.Login ?? "Не назначен") (ID: @(project.ResponsibleId?.ToString() ?? "N/A"))</td>
+                        <td>@(project.GIP?.Login ?? "Не назначен")</td>
+                        <td>@(project.AssistantGIP?.Login ?? "Не назначен")</td>
+                        <td>@(project.GAP?.Login ?? "Не назначен")</td>
+                        <td>@(project.GKP?.Login ?? "Не назначен")</td>
+                        <td>@(project.GP?.Login ?? "Не назначен")</td>
+                        <td>@(project.EOM?.Login ?? "Не назначен")</td>
+                        <td>@(project.SS?.Login ?? "Не назначен")</td>
+                        <td>@(project.AK?.Login ?? "Не назначен")</td>
+                        <td>@(project.Responsible?.Login ?? "Не назначен")</td>
                         <td>@(project.BKP?.Id.ToString() ?? "Не назначен")</td>
                         <td>@(project.TotalArea?.ToString("N2") ?? "N/A")</td>
                         <td>@(project.SaleableArea?.ToString("N2") ?? "N/A")</td>

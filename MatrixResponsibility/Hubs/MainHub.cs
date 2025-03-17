@@ -14,9 +14,10 @@ namespace MatrixResponsibility.Hubs
 
         public MainHub(AppDbContext appDbContext)
         {
+            this.appDbContext=appDbContext;
         }
 
-        public async Task<List<Project>?> GetAllProjects(CancellationToken ct)
+        public async Task<List<Project>?> GetAllProjects()
         {
             var r = await appDbContext.Projects
                 .Include(x => x.GIP)
@@ -29,23 +30,24 @@ namespace MatrixResponsibility.Hubs
                 .Include(x => x.AK)
                 .Include(x => x.Responsible)
                 .Include(x => x.BKP)
+                .Include(x=>x.Corrections)
                 .AsSplitQuery()
-                .ToListAsync(ct);
+                .ToListAsync(Context.ConnectionAborted);
 
             return r;
         }
 
-        public async Task ChangeProjectInfo(Project? project, CancellationToken ct)
+        public async Task ChangeProjectInfo(Project? project)
         {
             if (project == null) return;
 
-            var dbProject = await appDbContext.Projects.FirstOrDefaultAsync(x => x.Id == project.Id, ct);
+            var dbProject = await appDbContext.Projects.FirstOrDefaultAsync(x => x.Id == project.Id, Context.ConnectionAborted);
             if(dbProject!=null)
             {
-                dbProject = project;
-                await appDbContext.SaveChangesAsync(ct);
+                appDbContext.Projects.Update(project);
+                await appDbContext.SaveChangesAsync(Context.ConnectionAborted);
             }
-            await Clients.All.SendAsync(str.ProjectChanged, project, ct);
+            await Clients.All.SendAsync(str.ProjectChanged, project, Context.ConnectionAborted);
         }
     }
 }

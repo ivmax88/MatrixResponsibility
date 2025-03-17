@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,13 @@ builder.Services.AddHttpClient<ILDAPAuthenticationService, LDAPAuthenticationSer
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(o =>
+{
+    o.MaximumReceiveMessageSize = 10*1024*1024;
+}).AddJsonProtocol(o =>
+{
+    o.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 
 #region jwt
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

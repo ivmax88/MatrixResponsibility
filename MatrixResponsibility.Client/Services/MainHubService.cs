@@ -4,6 +4,7 @@ using MatrixResponsibility.Common.Constants;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,6 +38,10 @@ namespace MatrixResponsibility.Client.Services
             _connection = new HubConnectionBuilder()
                 .WithUrl($"http://localhost:5102/hubs/main?{str.access_token}={Uri.EscapeDataString(token)}")
                 .WithAutomaticReconnect()
+                .AddJsonProtocol(o=>
+                {
+                    o.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                })
                 .Build();
 
             _connection.On<Project?>(str.ProjectChanged, async (project) =>
