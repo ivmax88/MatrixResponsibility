@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace MatrixResponsibility.Client.Services
 {
-    public class AuthService 
+    public class AuthService
     {
         private readonly CustomAuthenticationStateProvider _stateProvider;
         private readonly HttpClient _httpClient;
@@ -22,16 +22,14 @@ namespace MatrixResponsibility.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task<bool> Login(string login, string password)
+        public async Task<bool> Login(string login, string password, CancellationToken ct)
         {
-            var token = await LoginJwt(login, password);
-            if (string.IsNullOrEmpty(token) == false)
-            {
-                await _stateProvider.MarkUserAsAuthenticated(token);
-                return true;
-            }
+            var result = await LoginJwt(login, password, ct);
+            if (result == null || result.Success == false || result.Token==null) return false;
 
-            return false;
+            await _stateProvider.MarkUserAsAuthenticated(result.Token);
+
+            return true;
         }
 
         public async Task<bool> Logout()
@@ -48,19 +46,18 @@ namespace MatrixResponsibility.Client.Services
         }
 
 
-        protected async Task<string?> LoginJwt(string login, string password)
+        protected async Task<LoginResponse?> LoginJwt(string login, string password, CancellationToken ct)
         {
             var content = JsonContent.Create(new LoginRequest(login, password));
-            var request = await _httpClient.PostAsync($"{Controllers.AuthService}/{nameof(IAuthService.Login)}", content, CancellationToken.None);
+            var request = await _httpClient.PostAsync($"{Controllers.AuthService}/{nameof(IAuthService.Login)}", content, ct);
             if (request.IsSuccessStatusCode)
             {
-                var result = await request.Content.ReadFromJsonAsync<LoginResponse>(CancellationToken.None);
-                return result?.Success==true ?  result?.Token : null;
+                var result = await request.Content.ReadFromJsonAsync<LoginResponse>(ct);
+                return result;
             }
             else
             {
-                var m = await request.Content.ReadAsStringAsync();
-                return m;
+                return new LoginResponse(false, null);
             }
         }
     }

@@ -4,6 +4,7 @@ using MatrixResponsibility.Client;
 using Blazored.LocalStorage;
 using MatrixResponsibility.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Radzen;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -28,6 +29,8 @@ builder.Services.AddHttpClient("api", client =>
 
 // Регистрация HttpClient для использования в компонентах
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("api"));
+
+builder.Services.AddRadzenComponents();
 
 // Настройка аутентификации
 builder.Services.AddAuthorizationCore();

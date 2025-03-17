@@ -1,13 +1,17 @@
 ﻿@inject NavigationManager navigation
+
+<RadzenComponents />
+
+
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-       <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" > 
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
             <Authorizing>
                 <p>Ожидайте, идет процесс авторизации</p>
             </Authorizing>
-            <NotAuthorized >
-                <MatrixResponsibility.Client.Pages.ReditectToLogin/>
-            </NotAuthorized> 
+            <NotAuthorized>
+                <MatrixResponsibility.Client.Pages.ReditectToLogin />
+            </NotAuthorized>
         </AuthorizeRouteView>
     </Found>
     <NotFound>

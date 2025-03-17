@@ -3,6 +3,7 @@
     public class str
     {
         public const string jwttoken = nameof(jwttoken);
+        public const string login = nameof(login);
         public const string authenticationType = "jwt";
         public const string access_token = nameof(access_token);
         public const string ProjectChanged = nameof(ProjectChanged);

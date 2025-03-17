@@ -1,40 +1,23 @@
 ﻿@page "/login"
-@inject AuthService AuthService
-@inject NavigationManager Navigation
+@layout EmptyLayout
+@inherits ApplicationComponentBase
 
-<h3>Login</h3>
 
-<div class="form-group">
-    <label>Username</label>
-    <input type="text" class="form-control" @bind="username" />
-</div>
-<div class="form-group">
-    <label>Password</label>
-    <input type="password" class="form-control" @bind="password" />
-</div>
-<button class="btn btn-primary" @onclick="HandleLogin">Login</button>
+<RadzenStack Style="max-width:30%">
+    <RadzenText>Необходимо указать <strong style="color:red;">Логин</strong> и <strong style="color:red;">Пароль</strong> от <strong style="color:red;">Компьютера</strong></RadzenText>
+    <RadzenFormField Text="Логин от Компьютера" Variant="Variant.Outlined">
+        <RadzenTextBox @bind-Value="@login" />
+    </RadzenFormField>
 
-@if (!string.IsNullOrEmpty(errorMessage))
-{
-    <p class="text-danger">@errorMessage</p>
-}
-
-@code {
-    private string username;
-    private string password;
-    private string errorMessage;
-
-    private async Task HandleLogin()
-    {
-        errorMessage = null;
-        var success = await AuthService.Login(username, password);
-        if (success)
-        {
-            Navigation.NavigateTo("/");
-        }
-        else
-        {
-            errorMessage = "Invalid username or password.";
-        }
-    }
-}
+    <RadzenFormField Text="Пароль от Компьютера" Variant="Variant.Outlined">
+        <ChildContent>
+            <RadzenTextBox @bind-Value=@password @oninput="(e=>password = e.Value?.ToString())" Visible="@(!showpassword)" @onkeypress="(e => PasswordInputKeyPressed(e))" />
+            <RadzenPassword @bind-Value=@password @oninput="(e=>password = e.Value?.ToString())" Visible="@showpassword" @onkeypress="(e => PasswordInputKeyPressed(e))" />
+        </ChildContent>
+        <End>
+            <RadzenButton Icon="@(showpassword ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
+        </End>
+    </RadzenFormField>
+    <RadzenButton ButtonStyle="ButtonStyle.Success" Text="Войти" Click="async e=> await LoginBtn()"
+                  Variant="Variant.Outlined" />
+</RadzenStack>

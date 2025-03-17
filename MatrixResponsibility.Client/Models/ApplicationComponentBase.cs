@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
+using Radzen;
 
 namespace MatrixResponsibility.Client.Models
 {
@@ -8,9 +10,14 @@ namespace MatrixResponsibility.Client.Models
 
         // Токен отмены, доступный для использования в производных классах
         protected CancellationToken CancellationToken => _cts.Token;
+        protected AlertOptions AlertOptions = new AlertOptions() { Width = "800px", OkButtonText= "Ok", };
+
+        [Inject] public NavigationManager Navigation { get; set; }
+        [Inject] public DialogService DialogService { get; set; }
+        [Inject] public ILocalStorageService LocalStorage { get; set; }
 
         // Асинхронная инициализация компонента
-        protected override async Task OnInitializedAsync()
+        protected sealed override async Task OnInitializedAsync()
         {
             try
             {
