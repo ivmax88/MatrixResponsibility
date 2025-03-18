@@ -1,11 +1,10 @@
 ﻿@page "/"
 @attribute [Authorize]
 @inherits ApplicationComponentBase
-<PageTitle>Home</PageTitle>
 
-<h1>Список проектов</h1>
+<PageTitle>МО</PageTitle>
 
-
+<h1><RadzenIcon Icon="list" style="margin-right: 5px;" /> Список проектов</h1>
 
 @if (projects == null)
 {
@@ -13,77 +12,32 @@
 }
 else if (!projects.Any())
 {
-    <p><em>Нет доступных проектов.</em></p>
+    <RadzenAlert AlertStyle="AlertStyle.Warning" Style="margin-bottom: 20px;">
+        <strong>Внимание!</strong> Нет доступных проектов.
+    </RadzenAlert>
 }
 else
 {
-    <div style="overflow-x: auto;">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Название проекта</th>
-                    <th>Маркетинговое название</th>
-                    <th>Адрес объекта</th>
-                    <th>Архитектурное бюро</th>
-                    <th>Заказчик</th>
-                    <th>Главный инженер (GIP)</th>
-                    <th>Помощник GIP</th>
-                    <th>Главный архитектор (GAP)</th>
-                    <th>Главный конструктор (GKP)</th>
-                    <th>Генеральный проектировщик (GP)</th>
-                    <th>Электрооборудование и механика (EOM)</th>
-                    <th>Слаботочные системы (SS)</th>
-                    <th>Автоматизация и контроль (AK)</th>
-                    <th>Ответственный</th>
-                    <th>Бюро комплексного проектирования (BKP)</th>
-                    <th>Общая площадь</th>
-                    <th>Продаваемая площадь</th>
-                    <th>Дата ГПЗУ</th>
-                    <th>Дата начала ПД</th>
-                    <th>Дата положительного заключения</th>
-                    <th>Дата начала РД</th>
-                    <th>Дата окончания РД</th>
-                    <th>Письмо разрешения старта</th>
-                    <th>Статус отчета</th>
-                    <th>Внутреннее совещание</th>
-                    <th>Корректировки</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var project in projects)
-                {
-                    <tr>
-                        <td>@project.Id</td>
-                        <td>@project.ProjectName</td>
-                        <td>@project.MarketingName</td>
-                        <td>@project.ObjectAddress?.Take(50)</td>
-                        <td>@project.AB</td>
-                        <td>@project.Customer</td>
-                        <td>@(project.GIP?.Login ?? "Не назначен")</td>
-                        <td>@(project.AssistantGIP?.Login ?? "Не назначен")</td>
-                        <td>@(project.GAP?.Login ?? "Не назначен")</td>
-                        <td>@(project.GKP?.Login ?? "Не назначен")</td>
-                        <td>@(project.GP?.Login ?? "Не назначен")</td>
-                        <td>@(project.EOM?.Login ?? "Не назначен")</td>
-                        <td>@(project.SS?.Login ?? "Не назначен")</td>
-                        <td>@(project.AK?.Login ?? "Не назначен")</td>
-                        <td>@(project.Responsible?.Login ?? "Не назначен")</td>
-                        <td>@(project.BKP?.Id.ToString() ?? "Не назначен")</td>
-                        <td>@(project.TotalArea?.ToString("N2") ?? "N/A")</td>
-                        <td>@(project.SaleableArea?.ToString("N2") ?? "N/A")</td>
-                        <td>@(project.GPZUDate?.ToString("dd.MM.yyyy") ?? "N/A")</td>
-                        <td>@(project.DateStartPD?.ToString("dd.MM.yyyy") ?? "N/A")</td>
-                        <td>@(project.DateFirstApproval?.ToString("dd.MM.yyyy") ?? "N/A")</td>
-                        <td>@(project.DateStartRD?.ToString("dd.MM.yyyy") ?? "N/A")</td>
-                        <td>@(project.DateEndRD?.ToString("dd.MM.yyyy") ?? "N/A")</td>
-                        <td>@project.StartPermissionLetter</td>
-                        <td>@project.ReportStatus</td>
-                        <td>@project.InternalMeeting</td>
-                        <td>@(project.Corrections != null ? project.Corrections.Count : 0)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    <RadzenDataGrid @ref="grid" Data="@projects" TItem="Project" AllowAlternatingRows="false" AllowFiltering="true" AllowSorting="true" 
+                    AllowVirtualization="true"
+                    AllowColumnResize="true"
+                    AllowGrouping="false" 
+                    EditMode="DataGridEditMode.Single"
+                    RowUpdate="@OnUpdateRow"
+                    Sort="@(args => Reset())" Page="@(args => Reset())" Filter="@(args => Reset())"
+                    ColumnWidth="200px" CellClick="@OnCellClick"
+                    Style="height:100vh">
+        <Columns>
+            <RadzenDataGridColumn TItem="Project" Property="@nameof(Project.ProjectName)" Title="Имя проекта" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.ProjectName)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.ProjectName" Style="width:100%; display: block" Name="ProjectName" aria-label="Введите имя проекта" />
+                    <RadzenRequiredValidator Text="ProjectName is required" Component="ProjectName" Popup="true" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+        </Columns>
+        
+    </RadzenDataGrid>
 }

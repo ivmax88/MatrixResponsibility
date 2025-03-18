@@ -4,6 +4,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 80
+# Создаем директорию для данных
+RUN mkdir -p /app/Data
 
 # Этот этап используется для сборки проекта службы
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -24,4 +26,7 @@ RUN dotnet publish "./MatrixResponsibility.csproj" -c $BUILD_CONFIGURATION -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# Копируем Excel-файлы из папки Data в контейнер
+RUN ls -la Data/  # Проверяем, что файлы видны в контексте
+COPY MatrixResponsibility/Data/*.xlsx /app/Data/
 ENTRYPOINT ["dotnet", "MatrixResponsibility.dll"]

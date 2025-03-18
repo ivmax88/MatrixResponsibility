@@ -1,0 +1,28 @@
+﻿@inherits LayoutComponentBase
+<RadzenComponents />
+
+<RadzenLayout>
+    <RadzenHeader class="rz-background-color-base-200 rz-color-danger-darker" Style="z-index:1000;">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" class="rz-color-danger-darker" />
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="10">
+                    <RadzenLink Text="@userName" Path="/" class="rz-color-danger-darker" translate="no" />
+                    @* <RadzenButton Icon="manage_accounts" ButtonStyle="ButtonStyle.Light" class="rz-color-danger-darker rz-background-color-base-300" title="Настройки" Click="@(()=>nav.NavigateTo("/settings"))" /> *@
+                    <RadzenButton Icon="logout" ButtonStyle="ButtonStyle.Light" class="rz-color-danger-darker rz-background-color-base-300" title="Выйти" Click="@(()=>Navigation.NavigateTo("/logout"))" />
+                </RadzenStack>
+            </RadzenStack>
+            <RadzenText class="rz-color-info-darker rz-mr-5 rz-mt-1">Пользователей online: @onlineCount</RadzenText>
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+        <RadzenPanelMenu>
+            <RadzenPanelMenuItem Text="temp" Icon="event" Path="/" />
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody style="transform: none;">
+        <div class="rz-p-6">
+            @Body
+        </div>
+    </RadzenBody>
+</RadzenLayout>

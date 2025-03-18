@@ -152,8 +152,8 @@ if (flag)
         // Используем сервис
         if (s != null)
         {
-            await s.ImportProjects(@"Data\Матрица ответственности ГП.xlsx");
-            await s.ImportAreasAndYers(@"Data\Счетчик положительных заключений.xlsx");
+            await s.ImportProjects(@"/app/Data/mo.xlsx");
+            await s.ImportAreasAndYers(@"/app/Data/areas.xlsx");
         }
     }
 }

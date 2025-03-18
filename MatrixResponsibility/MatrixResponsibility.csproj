@@ -33,10 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\Матрица ответственности ГП.xlsx">
+    <None Update="Data\mo.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\Счетчик положительных заключений.xlsx">
+    <None Update="Data\areas.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

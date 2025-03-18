@@ -1,0 +1,9 @@
+#docker compose -f "C:\Users\ivanov\source\repos\MatrixResponsibility\client.yml" build; docker compose -f "C:\Users\ivanov\source\repos\MatrixResponsibility\client.yml" up -d --force-recreate
+
+services:
+  matrixresponsibility-client:
+    build:
+      context: .
+      dockerfile: ./MatrixResponsibility.Client/Dockerfile
+    ports:
+      - "80:80"

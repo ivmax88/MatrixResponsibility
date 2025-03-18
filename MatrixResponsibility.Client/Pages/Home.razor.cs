@@ -1,24 +1,33 @@
 ﻿using MatrixResponsibility.Client.Services;
 using MatrixResponsibility.Common;
 using Microsoft.AspNetCore.Components;
-using System.Linq;
+using Microsoft.JSInterop;
+using Radzen;
+using Radzen.Blazor;
+using System.Collections.ObjectModel;
 
 namespace MatrixResponsibility.Client.Pages
 {
     public partial class Home
     {
         [Inject] public MainHubService MainHubService { get; set; }
+        [Inject] public IJSRuntime JSRuntime { get; set; }
 
-        private List<Project>? projects;
+        private ObservableCollection<Project>? projects;
+        private RadzenDataGrid<Project> grid;
+        private DotNetObjectReference<Home> dotNetObjRef;
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken)
         {
-            MainHubService.OnProjectChangedAsync += HandleProjectChangedAsync;
+            dotNetObjRef = DotNetObjectReference.Create(this);
             await MainHubService.InitializeAsync(cancellationToken);
+            MainHubService.OnProjectChanged += HandleProjectChangedAsync;
 
-            projects = await MainHubService.GetAllProjects(cancellationToken);
+            var tempProjects = await MainHubService.GetAllProjects(cancellationToken);
+            projects = new ObservableCollection<Project>(tempProjects ?? []);
+
+            await JSRuntime.InvokeVoidAsync("initializeDotNetHelper", dotNetObjRef);
         }
-
         private async Task HandleProjectChangedAsync(Project updatedProject)
         {
             if (projects != null)
@@ -33,15 +42,110 @@ namespace MatrixResponsibility.Client.Pages
                 {
                     projects.Add(updatedProject);
                 }
-                await Task.Delay(1); // Даем UI возможность обновиться
-                await InvokeAsync(StateHasChanged);
             }
         }
 
+        private async Task OnUpdateRow(Project project)
+        {
+            await MainHubService.ChangeProjectInfo(project);
+            Reset(project); // Сбрасываем состояние
+        }
+
+        private Project currentEditedProject; // Одиночный объект для текущего редактируемого проекта
+        private string columnEditing;
+        private IRadzenFormComponent editor; // Оставляем для работы с RadzenTextBox
+
+        private bool IsEditing(string columnName, Project order)
+        {
+            // Проверяем, что текущая колонка и редактируемый проект совпадают
+            return columnEditing == columnName && currentEditedProject == order;
+        }
+
+        private async Task OnCellClick(DataGridCellMouseEventArgs<Project> args)
+        {
+            if (!grid.IsValid || (currentEditedProject == args.Data && columnEditing == args.Column.Property))
+            {
+                return;
+            }
+
+            // Если уже редактируем другой проект, завершаем редактирование
+            if (currentEditedProject != null)
+            {
+                await Update();
+            }
+
+            // This sets which column is currently being edited.
+            columnEditing = args.Column.Property;
+
+            // This sets the Item to be edited.
+            await EditRow(args.Data);
+        }
+
+        private async Task Update()
+        {
+            if (currentEditedProject != null)
+            {
+                await grid.UpdateRow(currentEditedProject);
+            }
+        }
+
+        private async Task EditRow(Project project)
+        {
+            Reset();
+
+            currentEditedProject = project; // Устанавливаем текущий редактируемый проект
+            await grid.EditRow(project);
+
+            // Добавляем небольшую задержку для завершения рендеринга
+            await Task.Delay(1);
+
+            // Устанавливаем курсор в конец текста в RadzenTextBox
+            if (editor != null && editor is RadzenComponent rc)
+            {
+                await JSRuntime.InvokeVoidAsync("setCursorToEnd", rc.Element);
+            }
+        }
+
+        private void Reset(Project project = null)
+        {
+            if (project != null)
+            {
+                if (currentEditedProject == project)
+                {
+                    currentEditedProject = null;
+                }
+            }
+            else
+            {
+                currentEditedProject = null;
+            }
+        }
+
+        #region Обработка отмены редактирования
+
+        [JSInvokable]
+        public static void InitializeDotNetHelper(DotNetObjectReference<Home> reference)
+        {
+        }
+
+        [JSInvokable]
+        public async Task OnEscapeKeyPressed()
+        {
+            if (currentEditedProject != null)
+            {
+                grid.CancelEditRow(currentEditedProject); // Синхронный вызов
+                Reset(currentEditedProject); // Сбрасываем состояние
+                await InvokeAsync(StateHasChanged); // Обновляем UI
+            }
+        }
+        #endregion
+
         protected override async Task DisposeResourcesAsync()
         {
-            MainHubService.OnProjectChangedAsync -= HandleProjectChangedAsync;
+            MainHubService.OnProjectChanged -= HandleProjectChangedAsync;
             await MainHubService.StopAsync(CancellationToken);
+            await MainHubService.DisposeAsync();
+            dotNetObjRef?.Dispose();
         }
     }
 }

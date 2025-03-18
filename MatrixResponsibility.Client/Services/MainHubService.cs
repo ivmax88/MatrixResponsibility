@@ -14,14 +14,19 @@ namespace MatrixResponsibility.Client.Services
     {
         private readonly ILocalStorageService _localStorage;
         private readonly ILogger<MainHubService> _logger;
+        private readonly IConfiguration configuration;
         private HubConnection? _connection;
 
-        public event Func<Project, Task>? OnProjectChangedAsync;
+        public event Func<Project, Task>? OnProjectChanged;
+        public event Func<int, Task>? OnConnectedClientsCountChanged;
 
-        public MainHubService(ILocalStorageService localStorage, ILogger<MainHubService> logger)
+        public MainHubService(ILocalStorageService localStorage, 
+            ILogger<MainHubService> logger,
+            IConfiguration configuration)
         {
             _localStorage = localStorage;
             _logger = logger;
+            this.configuration=configuration;
         }
 
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -36,7 +41,10 @@ namespace MatrixResponsibility.Client.Services
             }
 
             _connection = new HubConnectionBuilder()
-                .WithUrl($"http://localhost:5102/hubs/main?{str.access_token}={Uri.EscapeDataString(token)}")
+                .WithUrl($"{configuration["ApiUrl"]}/hubs/main?{str.access_token}={Uri.EscapeDataString(token)}", opt =>
+                {
+                    opt.CloseTimeout = TimeSpan.FromMinutes(2);
+                })
                 .WithAutomaticReconnect()
                 .AddJsonProtocol(o=>
                 {
@@ -48,15 +56,31 @@ namespace MatrixResponsibility.Client.Services
             {
                 try
                 {
-                    _logger.LogInformation("Project changed: {Project}", project);
-                    if (OnProjectChangedAsync != null)
+                    _logger.LogInformation($"Project changed: {project}");
+                    if (OnProjectChanged != null)
                     {
-                        await OnProjectChangedAsync(project);
+                        await OnProjectChanged(project);
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error handling ProjectChanged event.");
+                    _logger.LogError(ex, $"Error handling {str.ProjectChanged} event.");
+                }
+            });
+
+            _connection.On<int>(str.ConnectedClientsCount, async (count) =>
+            {
+                try
+                {
+                    _logger.LogInformation($"Online connections: {count}");
+                    if (OnConnectedClientsCountChanged != null)
+                    {
+                        await OnConnectedClientsCountChanged(count);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Error handling {str.ConnectedClientsCount} event.");
                 }
             });
 
@@ -88,7 +112,7 @@ namespace MatrixResponsibility.Client.Services
         }
 
 
-        public async Task ChangeProjectInfo(Project project, CancellationToken cancellationToken = default)
+        public async Task ChangeProjectInfo(Project project)
         {
             if (_connection == null || _connection.State == HubConnectionState.Disconnected)
             {
@@ -97,7 +121,7 @@ namespace MatrixResponsibility.Client.Services
 
             try
             {
-                await _connection.InvokeAsync(str.ChangeProjectInfo, project, cancellationToken);
+                await _connection.InvokeAsync(str.ChangeProjectInfo, project);
                 _logger.LogInformation("Project info changed: {Project}", project);
             }
             catch (OperationCanceledException)
@@ -161,6 +185,7 @@ namespace MatrixResponsibility.Client.Services
             if (_connection != null)
             {
                 await _connection.DisposeAsync();
+                _connection = null;
                 _logger.LogInformation("SignalR connection disposed.");
             }
         }

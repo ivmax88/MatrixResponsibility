@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Radzen;
 
 namespace MatrixResponsibility.Client.Models
@@ -15,6 +16,7 @@ namespace MatrixResponsibility.Client.Models
         [Inject] public NavigationManager Navigation { get; set; }
         [Inject] public DialogService DialogService { get; set; }
         [Inject] public ILocalStorageService LocalStorage { get; set; }
+        [Inject] public IJSRuntime JSRuntime { get; set; }
 
         // Асинхронная инициализация компонента
         protected sealed override async Task OnInitializedAsync()
