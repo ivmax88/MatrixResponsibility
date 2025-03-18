@@ -18,7 +18,8 @@ else if (!projects.Any())
 }
 else
 {
-    <RadzenDataGrid @ref="grid" Data="@projects" TItem="ProjectDTO" AllowAlternatingRows="false" AllowFiltering="true" AllowSorting="true"
+  
+  <RadzenDataGrid @ref="grid" Data="@projects" TItem="ProjectDTO" AllowAlternatingRows="false" AllowFiltering="true" AllowSorting="true"
                     AllowVirtualization="true"
                     AllowColumnResize="true"
                     AllowGrouping="false"
@@ -26,7 +27,7 @@ else
                     Density="Density.Compact"
                     RowUpdate="@OnUpdateRow"
                     Sort="@(args => Reset())" Page="@(args => Reset())" Filter="@(args => Reset())"
-                    ColumnWidth="200px" CellClick="@OnCellClick"
+                    ColumnWidth="200px" CellDoubleClick="@OnCellClick"
                     Style="height:80vh">
         <Columns>
             <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.ProjectName)" Title="Имя проекта" IsInEditMode="@IsEditing">
@@ -72,15 +73,6 @@ else
                 </Template>
                 <EditTemplate Context="project">
                     <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.Customer" Style="width:100%; display: block" Name="@nameof(ProjectDTO.Customer)" />
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.StartPermissionLetter)" Title="Письмо о разрешении старта" IsInEditMode="@IsEditing">
-                <Template Context="project">
-                    <RadzenText Text="@(project.StartPermissionLetter)" />
-                </Template>
-                <EditTemplate Context="project">
-                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.StartPermissionLetter" Style="width:100%; display: block" Name="@nameof(ProjectDTO.StartPermissionLetter)" />
                 </EditTemplate>
             </RadzenDataGridColumn>
 
@@ -137,7 +129,7 @@ else
 
             <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.DateStartRD)" Title="Старт РД" Width="200px" IsInEditMode="@IsEditing">
                 <Template Context="project">
-                    <RadzenText Text="@(String.Format("{0:d}", project.DateStartRD))" />
+                    <RadzenText Text="@(String.Format("{0:d}", project.DateStartRD))"/>
                 </Template>
                 <EditTemplate Context="project">
                     <RadzenDatePicker @ref="editor" Change="@(args => Update())" @bind-Value="project.DateStartRD"
@@ -158,5 +150,5 @@ else
             </RadzenDataGridColumn>
         </Columns>
 
-    </RadzenDataGrid>
+    </RadzenDataGrid> 
 }

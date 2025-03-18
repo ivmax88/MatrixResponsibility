@@ -17,6 +17,10 @@ namespace MatrixResponsibility.Client.Pages
         private ObservableCollection<ProjectDTO>? projects;
         private RadzenDataGrid<ProjectDTO> grid;
         private DotNetObjectReference<Home> dotNetObjRef;
+        private ProjectDTO currentEditedProject; // Одиночный объект для текущего редактируемого проекта
+        private string columnEditing;
+        private IRadzenFormComponent editor; //  для работы с RadzenTextBox
+
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken)
         {
@@ -51,11 +55,6 @@ namespace MatrixResponsibility.Client.Pages
             await MainHubService.ChangeProjectInfo(project);
             Reset(project); // Сбрасываем состояние
         }
-
-        private ProjectDTO currentEditedProject; // Одиночный объект для текущего редактируемого проекта
-        private string columnEditing;
-        private IRadzenFormComponent editor; // Оставляем для работы с RadzenTextBox
-
         private bool IsEditing(string columnName, ProjectDTO order)
         {
             // Проверяем, что текущая колонка и редактируемый проект совпадают
@@ -136,7 +135,7 @@ namespace MatrixResponsibility.Client.Pages
             {
                 grid.CancelEditRow(currentEditedProject); // Синхронный вызов
                 Reset(currentEditedProject); // Сбрасываем состояние
-                await InvokeAsync(StateHasChanged); // Обновляем UI
+                //await InvokeAsync(StateHasChanged); // Обновляем UI
             }
         }
         #endregion
