@@ -26,7 +26,7 @@ else
                     RowUpdate="@OnUpdateRow"
                     Sort="@(args => Reset())" Page="@(args => Reset())" Filter="@(args => Reset())"
                     ColumnWidth="200px" CellClick="@OnCellClick"
-                    Style="height:100vh">
+                    Style="height:80vh">
         <Columns>
             <RadzenDataGridColumn TItem="Project" Property="@nameof(Project.ProjectName)" Title="Имя проекта" IsInEditMode="@IsEditing">
                 <Template Context="project">
