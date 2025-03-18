@@ -22,7 +22,6 @@ else
                     AllowVirtualization="true"
                     AllowColumnResize="true"
                     AllowGrouping="false" 
-                    EditMode="DataGridEditMode.Single"
                     RowUpdate="@OnUpdateRow"
                     Sort="@(args => Reset())" Page="@(args => Reset())" Filter="@(args => Reset())"
                     ColumnWidth="200px" CellClick="@OnCellClick"
@@ -33,8 +32,17 @@ else
                     <RadzenText Text="@(project.ProjectName)" />
                 </Template>
                 <EditTemplate Context="project">
-                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.ProjectName" Style="width:100%; display: block" Name="ProjectName" aria-label="Введите имя проекта" />
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.ProjectName" Style="width:100%; display: block" Name="ProjectName"/>
                     <RadzenRequiredValidator Text="ProjectName is required" Component="ProjectName" Popup="true" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="Project" Property="@nameof(Project.AB)" Title="Архитектурное бюро" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.AB)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.AB" Style="width:100%; display: block" Name="ProjectName"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
         </Columns>
