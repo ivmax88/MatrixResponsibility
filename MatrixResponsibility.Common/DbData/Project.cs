@@ -144,7 +144,7 @@ namespace MatrixResponsibility.Common
         /// Идентификатор Бюро комплексного проектирования.
         /// </summary>
         [Column("bkp_id")]
-        public int? BKPId { get; set; }
+        public int BKPId { get; set; }
 
         /// <summary>
         /// Дата начала проектирования ПД.
@@ -230,7 +230,7 @@ namespace MatrixResponsibility.Common
         /// <summary>
         /// Навигационное свойство для связи с Бюро комплексного проектирования.
         /// </summary>
-        public BKP? BKP { get; set; }
+        public BKP BKP { get; set; }
 
         /// <summary>
         /// Коллекция корректировок проекта.

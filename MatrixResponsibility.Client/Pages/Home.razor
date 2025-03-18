@@ -18,34 +18,145 @@ else if (!projects.Any())
 }
 else
 {
-    <RadzenDataGrid @ref="grid" Data="@projects" TItem="Project" AllowAlternatingRows="false" AllowFiltering="true" AllowSorting="true" 
+    <RadzenDataGrid @ref="grid" Data="@projects" TItem="ProjectDTO" AllowAlternatingRows="false" AllowFiltering="true" AllowSorting="true"
                     AllowVirtualization="true"
                     AllowColumnResize="true"
-                    AllowGrouping="false" 
+                    AllowGrouping="false"
+                    GridLines="DataGridGridLines.Both"
+                    Density="Density.Compact"
                     RowUpdate="@OnUpdateRow"
                     Sort="@(args => Reset())" Page="@(args => Reset())" Filter="@(args => Reset())"
                     ColumnWidth="200px" CellClick="@OnCellClick"
                     Style="height:80vh">
         <Columns>
-            <RadzenDataGridColumn TItem="Project" Property="@nameof(Project.ProjectName)" Title="Имя проекта" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.ProjectName)" Title="Имя проекта" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.ProjectName)" />
                 </Template>
                 <EditTemplate Context="project">
-                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.ProjectName" Style="width:100%; display: block" Name="ProjectName"/>
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.ProjectName" Style="width:100%; display: block" Name="@nameof(ProjectDTO.ProjectName)" />
                     <RadzenRequiredValidator Text="ProjectName is required" Component="ProjectName" Popup="true" />
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="Project" Property="@nameof(Project.AB)" Title="Архитектурное бюро" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.AB)" Title="Архитектурное бюро" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.AB)" />
                 </Template>
                 <EditTemplate Context="project">
-                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.AB" Style="width:100%; display: block" Name="ProjectName"/>
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.AB" Style="width:100%; display: block" Name="@nameof(ProjectDTO.ProjectName)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.InternalMeeting)" Title="Внутренее совещание" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.InternalMeeting)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.InternalMeeting" Style="width:100%; display: block" Name="@nameof(ProjectDTO.ProjectName)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.ReportStatus)" Title="Статус отчета" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.ReportStatus)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.ReportStatus" Style="width:100%; display: block" Name="@nameof(ProjectDTO.ReportStatus)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.Customer)" Title="Заказчик" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.Customer)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.Customer" Style="width:100%; display: block" Name="@nameof(ProjectDTO.Customer)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.StartPermissionLetter)" Title="Письмо о разрешении старта" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.StartPermissionLetter)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.StartPermissionLetter" Style="width:100%; display: block" Name="@nameof(ProjectDTO.StartPermissionLetter)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.MarketingName)" Title="Маркетинговое название" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.MarketingName)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.MarketingName" Style="width:100%; display: block" Name="@nameof(ProjectDTO.MarketingName)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.ObjectAddress)" Title="Адрес" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.ObjectAddress)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor" Change="@(args => Update())" @bind-Value="project.ObjectAddress" Style="width:100%; display: block" Name="@nameof(ProjectDTO.ObjectAddress)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.GPZUDate)" Title="Дата ГПЗУ" Width="200px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(String.Format("{0:d}", project.GPZUDate))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker @ref="editor" Change="@(args => Update())" @bind-Value="project.GPZUDate"
+                                      DateFormat="yyyy.MM.dd"
+                                      Style="width:100%" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.DateStartPD)" Title="Старт ПД" Width="200px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(String.Format("{0:d}", project.DateStartPD))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker @ref="editor" Change="@(args => Update())" @bind-Value="project.DateStartPD"
+                                      DateFormat="yyyy.MM.dd"
+                                      Style="width:100%" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.DateFirstApproval)" Title="Согласование ПД" Width="200px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(String.Format("{0:d}", project.DateFirstApproval))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker @ref="editor" Change="@(args => Update())" @bind-Value="project.DateFirstApproval"
+                                      DateFormat="yyyy.MM.dd"
+                                      Style="width:100%" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.DateStartRD)" Title="Старт РД" Width="200px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(String.Format("{0:d}", project.DateStartRD))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker @ref="editor" Change="@(args => Update())" @bind-Value="project.DateStartRD"
+                                      DateFormat="yyyy.MM.dd"
+                                      Style="width:100%" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@nameof(ProjectDTO.DateEndRD)" Title="Финиш РД" Width="200px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(String.Format("{0:d}", project.DateEndRD))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker @ref="editor" Change="@(args => Update())" @bind-Value="project.DateEndRD"
+                                      DateFormat="yyyy.MM.dd"
+                                      Style="width:100%" />
                 </EditTemplate>
             </RadzenDataGridColumn>
         </Columns>
-        
+
     </RadzenDataGrid>
 }

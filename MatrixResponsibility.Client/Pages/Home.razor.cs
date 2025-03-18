@@ -1,5 +1,6 @@
 ﻿using MatrixResponsibility.Client.Services;
 using MatrixResponsibility.Common;
+using MatrixResponsibility.Common.DTOs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
@@ -13,8 +14,8 @@ namespace MatrixResponsibility.Client.Pages
         [Inject] public MainHubService MainHubService { get; set; }
         [Inject] public IJSRuntime JSRuntime { get; set; }
 
-        private ObservableCollection<Project>? projects;
-        private RadzenDataGrid<Project> grid;
+        private ObservableCollection<ProjectDTO>? projects;
+        private RadzenDataGrid<ProjectDTO> grid;
         private DotNetObjectReference<Home> dotNetObjRef;
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken)
@@ -24,11 +25,11 @@ namespace MatrixResponsibility.Client.Pages
             MainHubService.OnProjectChanged += HandleProjectChangedAsync;
 
             var tempProjects = await MainHubService.GetAllProjects(cancellationToken);
-            projects = new ObservableCollection<Project>(tempProjects ?? []);
+            projects = new ObservableCollection<ProjectDTO>(tempProjects);
 
             await JSRuntime.InvokeVoidAsync("initializeDotNetHelper", dotNetObjRef);
         }
-        private async Task HandleProjectChangedAsync(Project updatedProject)
+        private async Task HandleProjectChangedAsync(ProjectDTO updatedProject)
         {
             if (projects != null)
             {
@@ -45,23 +46,23 @@ namespace MatrixResponsibility.Client.Pages
             }
         }
 
-        private async Task OnUpdateRow(Project project)
+        private async Task OnUpdateRow(ProjectDTO project)
         {
             await MainHubService.ChangeProjectInfo(project);
             Reset(project); // Сбрасываем состояние
         }
 
-        private Project currentEditedProject; // Одиночный объект для текущего редактируемого проекта
+        private ProjectDTO currentEditedProject; // Одиночный объект для текущего редактируемого проекта
         private string columnEditing;
         private IRadzenFormComponent editor; // Оставляем для работы с RadzenTextBox
 
-        private bool IsEditing(string columnName, Project order)
+        private bool IsEditing(string columnName, ProjectDTO order)
         {
             // Проверяем, что текущая колонка и редактируемый проект совпадают
             return columnEditing == columnName && currentEditedProject == order;
         }
 
-        private async Task OnCellClick(DataGridCellMouseEventArgs<Project> args)
+        private async Task OnCellClick(DataGridCellMouseEventArgs<ProjectDTO> args)
         {
             if (!grid.IsValid || (currentEditedProject == args.Data && columnEditing == args.Column.Property))
             {
@@ -89,7 +90,7 @@ namespace MatrixResponsibility.Client.Pages
             }
         }
 
-        private async Task EditRow(Project project)
+        private async Task EditRow(ProjectDTO project)
         {
             Reset();
 
@@ -100,13 +101,13 @@ namespace MatrixResponsibility.Client.Pages
             await Task.Delay(1);
 
             // Устанавливаем курсор в конец текста в RadzenTextBox
-            if (editor != null && editor is RadzenComponent rc)
+            if (editor != null && editor is RadzenTextBox rc)
             {
                 await JSRuntime.InvokeVoidAsync("setCursorToEnd", rc.Element);
             }
         }
 
-        private void Reset(Project project = null)
+        private void Reset(ProjectDTO project = null)
         {
             if (project != null)
             {

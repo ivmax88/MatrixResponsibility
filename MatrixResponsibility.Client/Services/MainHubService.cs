@@ -1,12 +1,8 @@
 ﻿using Blazored.LocalStorage;
-using MatrixResponsibility.Common;
 using MatrixResponsibility.Common.Constants;
+using MatrixResponsibility.Common.DTOs;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MatrixResponsibility.Client.Services
 {
@@ -17,10 +13,10 @@ namespace MatrixResponsibility.Client.Services
         private readonly IConfiguration configuration;
         private HubConnection? _connection;
 
-        public event Func<Project, Task>? OnProjectChanged;
+        public event Func<ProjectDTO, Task>? OnProjectChanged;
         public event Func<int, Task>? OnConnectedClientsCountChanged;
 
-        public MainHubService(ILocalStorageService localStorage, 
+        public MainHubService(ILocalStorageService localStorage,
             ILogger<MainHubService> logger,
             IConfiguration configuration)
         {
@@ -46,13 +42,13 @@ namespace MatrixResponsibility.Client.Services
                     opt.CloseTimeout = TimeSpan.FromMinutes(2);
                 })
                 .WithAutomaticReconnect()
-                .AddJsonProtocol(o=>
+                .AddJsonProtocol(o =>
                 {
                     o.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 })
                 .Build();
 
-            _connection.On<Project?>(str.ProjectChanged, async (project) =>
+            _connection.On<ProjectDTO>(str.ProjectChanged, async (project) =>
             {
                 try
                 {
@@ -87,7 +83,7 @@ namespace MatrixResponsibility.Client.Services
             await StartAsync(cancellationToken);
         }
 
-        public async Task<List<Project>?> GetAllProjects(CancellationToken ct)
+        public async Task<List<ProjectDTO>> GetAllProjects(CancellationToken ct)
         {
             if (_connection == null || _connection.State == HubConnectionState.Disconnected)
             {
@@ -95,7 +91,7 @@ namespace MatrixResponsibility.Client.Services
             }
             try
             {
-                var r= await _connection.InvokeAsync<List<Project>?>(str.GetAllProjects, ct);
+                var r = await _connection.InvokeAsync<List<ProjectDTO>>(str.GetAllProjects, ct);
                 _logger.LogInformation("GetAllProjects");
                 return r;
             }
@@ -112,7 +108,7 @@ namespace MatrixResponsibility.Client.Services
         }
 
 
-        public async Task ChangeProjectInfo(Project project)
+        public async Task ChangeProjectInfo(ProjectDTO project)
         {
             if (_connection == null || _connection.State == HubConnectionState.Disconnected)
             {

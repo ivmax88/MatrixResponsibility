@@ -233,11 +233,11 @@ namespace MatrixResponsibility.Services
             }
         }
 
-        private async Task<int?> FindBKP(string bkpName)
+        private async Task<int> FindBKP(string bkpName)
         {
             if (string.IsNullOrEmpty(bkpName))
             {
-                return null;
+                throw new NullReferenceException($"Не удалось найти БКП при импорте данных: {bkpName}");
             }
 
             var bkp = await _context.BKPs.FirstOrDefaultAsync(x => x.Name == bkpName);
