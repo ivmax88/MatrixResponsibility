@@ -1,11 +1,12 @@
 ﻿using MatrixResponsibility.Client.Services;
-using MatrixResponsibility.Common;
 using MatrixResponsibility.Common.DTOs;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Radzen;
 using Radzen.Blazor;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 
 namespace MatrixResponsibility.Client.Pages
 {
@@ -16,16 +17,16 @@ namespace MatrixResponsibility.Client.Pages
 
         private ObservableCollection<ProjectDTO>? projects;
         private List<UserDTO> users;
-        private RadzenDataGrid<ProjectDTO> grid;
-        private DotNetObjectReference<Home> dotNetObjRef;
-        private ProjectDTO currentEditedProject; // Одиночный объект для текущего редактируемого проекта
-        private string columnEditing;
-        private IRadzenFormComponent editor; //  для работы с RadzenTextBox
 
+
+        private RadzenDataGrid<ProjectDTO> grid;
+        private string columnEditing;
+        private ProjectDTO projectEditingNew;
+        private ProjectDTO projectEditingOld;
+        private IRadzenFormComponent editor;
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken)
         {
-            dotNetObjRef = DotNetObjectReference.Create(this);
             await MainHubService.InitializeAsync(cancellationToken);
             MainHubService.OnProjectChanged += HandleProjectChangedAsync;
 
@@ -33,8 +34,6 @@ namespace MatrixResponsibility.Client.Pages
             projects = new ObservableCollection<ProjectDTO>(tempProjects);
 
             users = await MainHubService.GetAllUsers(cancellationToken);
-
-            await JSRuntime.InvokeVoidAsync("initializeDotNetHelper", dotNetObjRef);
         }
         private async Task HandleProjectChangedAsync(ProjectDTO updatedProject)
         {
@@ -56,99 +55,70 @@ namespace MatrixResponsibility.Client.Pages
         private async Task OnUpdateRow(ProjectDTO project)
         {
             await MainHubService.ChangeProjectInfo(project);
-            Reset(project); // Сбрасываем состояние
-        }
-        private bool IsEditing(string columnName, ProjectDTO order)
-        {
-            // Проверяем, что текущая колонка и редактируемый проект совпадают
-            return columnEditing == columnName && currentEditedProject == order;
         }
 
-        private async Task OnCellClick(DataGridCellMouseEventArgs<ProjectDTO> args)
+        async Task OnCellDblClick(DataGridCellMouseEventArgs<ProjectDTO> args)
         {
-            if (!grid.IsValid || (currentEditedProject == args.Data && columnEditing == args.Column.Property))
-            {
-                return;
-            }
-
-            // Если уже редактируем другой проект, завершаем редактирование
-            if (currentEditedProject != null)
-            {
-                await Update();
-            }
-
-            // This sets which column is currently being edited.
             columnEditing = args.Column.Property;
+            projectEditingNew = args.Data;
+            projectEditingOld = JsonSerializer.Deserialize<ProjectDTO>(JsonSerializer.Serialize(projectEditingNew));
+            await grid.EditRow(args.Data);
+            await Task.Yield();
+            await editor.FocusAsync();
 
-            // This sets the Item to be edited.
-            await EditRow(args.Data);
-        }
-
-        private async Task Update()
-        {
-            if (currentEditedProject != null)
-            {
-                await grid.UpdateRow(currentEditedProject);
-            }
-        }
-
-        private async Task EditRow(ProjectDTO project)
-        {
-            Reset();
-
-            currentEditedProject = project; // Устанавливаем текущий редактируемый проект
-            await grid.EditRow(project);
-
-            // Добавляем небольшую задержку для завершения рендеринга
-            await Task.Delay(1);
-
-            // Устанавливаем курсор в конец текста в RadzenTextBox
-            if (editor != null && editor is RadzenTextBox rc)
-            {
-                await JSRuntime.InvokeVoidAsync("setCursorToEnd", rc.Element);
-            }
-        }
-
-        private void Reset(ProjectDTO project = null)
-        {
-            if (project != null)
-            {
-                if (currentEditedProject == project)
-                {
-                    currentEditedProject = null;
-                }
-            }
-            else
-            {
-                currentEditedProject = null;
-            }
-        }
-
-        #region Обработка отмены редактирования
-
-        [JSInvokable]
-        public static void InitializeDotNetHelper(DotNetObjectReference<Home> reference)
-        {
+            // Добавляем слушатель Escape через JS
+            await JSRuntime.InvokeVoidAsync("addEscapeListener", DotNetObjectReference.Create(this));
+            await JSRuntime.InvokeVoidAsync("addEnterListener", DotNetObjectReference.Create(this));
         }
 
         [JSInvokable]
-        public async Task OnEscapeKeyPressed()
+        public async Task OnEscapePressed()
         {
-            if (currentEditedProject != null)
-            {
-                grid.CancelEditRow(currentEditedProject); // Синхронный вызов
-                Reset(currentEditedProject); // Сбрасываем состояние
-                //await InvokeAsync(StateHasChanged); // Обновляем UI
-            }
+            await Cancel();
         }
-        #endregion
+        [JSInvokable]
+        public async Task OnEnterPressed()
+        {
+            await Update();
+        }
+
+        bool IsEditing(string columnName, ProjectDTO project)
+        {
+            return columnEditing == columnName && projectEditingNew==project;
+        }
+
+        async Task Update()
+        {
+            await grid.UpdateRow(projectEditingNew);
+        }
+
+        async Task Cancel()
+        {
+            var existProject = projects?.FirstOrDefault(p => p.Id == projectEditingOld?.Id);
+            if (existProject==null) return;
+            var index = projects?.IndexOf(existProject) ?? -1;
+            if (index == -1) return;
+            if (projects==null) return;
+            projects[index] = projectEditingOld;
+            grid.CancelEditRow(projectEditingOld);
+        }
+
+        async Task KeyPressed(KeyboardEventArgs args)
+        {
+#if DEBUG
+            Console.WriteLine($"Key pressed: {args.Key}"); // Для отладки
+#endif
+            if (args.Key == "Enter")
+                await Update();
+            else if (args.Key == "Escape")
+                await Cancel();
+        }
 
         protected override async Task DisposeResourcesAsync()
         {
             MainHubService.OnProjectChanged -= HandleProjectChangedAsync;
             await MainHubService.StopAsync(CancellationToken);
             await MainHubService.DisposeAsync();
-            dotNetObjRef?.Dispose();
         }
     }
 }

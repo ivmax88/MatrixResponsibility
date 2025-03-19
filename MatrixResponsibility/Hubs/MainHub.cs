@@ -52,6 +52,9 @@ namespace MatrixResponsibility.Hubs
         public async Task<List<ProjectDTO>> GetAllProjects()
         {
             var r = await appDbContext.Projects
+#if DEBUG
+                .Take(10)
+#endif
                 .Select(x => new ProjectDTO
                 {
                     Id = x.Id,
