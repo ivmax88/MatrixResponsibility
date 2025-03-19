@@ -5,7 +5,7 @@ namespace MatrixResponsibility.Client.Layout
 {
     public partial class MyLayout
     {
-        private bool sidebar1Expanded = true;
+        private bool sidebar1Expanded = false;
         private string userName;
         private int onlineCount;
 
@@ -27,5 +27,6 @@ namespace MatrixResponsibility.Client.Layout
             await InvokeAsync(StateHasChanged);
         }
 
+       
     }
 }

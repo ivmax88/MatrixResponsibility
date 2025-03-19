@@ -6,6 +6,16 @@
 
 <h1><RadzenIcon Icon="list" style="margin-right: 5px;" /> Список проектов</h1>
 
+<style>
+    .custom-grid .rz-column-title {
+        white-space: normal !important;
+        word-wrap: break-word;
+        height: auto;
+        line-height: normal;
+        padding: 4px;
+    }
+</style>
+
 @if (projects == null)
 {
     <p><em>Загрузка...</em></p>
@@ -27,9 +37,10 @@ else
                     RowUpdate="@OnUpdateRow"
                     CellDoubleClick="@OnCellDblClick"
                     ColumnWidth="200px"
-                    Style="height:80vh">
+                    class="custom-grid"
+                    Style="height:80vh;">
         <Columns>
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.ProjectName))" Title="Имя проекта" Width="200px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.ProjectName))" Title="Имя проекта" Width="200px" Frozen="@true" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.ProjectName)" />
                 </Template>
@@ -43,7 +54,70 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.AB))" Title="Архитектурное бюро" Width="80px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GIP.Login))" Title="ГИП" Width="120px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.GIP.Login)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.GIP"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.AssistantGIP.Login))" Title="ПомГИП" Width="120px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.AssistantGIP.Login)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.AssistantGIP"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GAP.Login))" Title="ГАП" Width="120px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.GAP.Login)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.GAP"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GKP.Login))" Title="ГКП" Width="120px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.GKP.Login)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.GKP"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.AB))" Width="150px" IsInEditMode="@IsEditing">
+                <HeaderTemplate>
+                    Архитектурное<br/>бюро
+                </HeaderTemplate>
                 <Template Context="project">
                     <RadzenText Text="@(project.AB)" />
                 </Template>
@@ -56,18 +130,93 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GIP.Login))" Title="ГИП" Width="80px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GP.Login))" Title="ГП" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
-                    <RadzenText Text="@(project.GIP.Login)" />
+                    <RadzenText Text="@(project.GP.Login)" />
                 </Template>
                 <EditTemplate Context="project">
-                        <RadzenDropDown @ref="@editor" TValue="UserDTO"
-                                        @bind-Value="@project.GIP"
-                                        AllowClear="@true"
-                                        AllowFiltering="@true"
-                                        AllowVirtualization="@true"
-                                        Data="@users"
-                                        TextProperty="@nameof(UserDTO.Login)" />
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.GP"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.EOM.Login))" Title="ЭОМ" Width="120px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.EOM.Login)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.EOM"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.SS.Login))" Title="СС" Width="120px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.SS.Login)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.SS"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.AK.Login))" Title="АК" Width="120px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.AK.Login)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDropDown @ref="@editor" TValue="UserDTO"
+                                    @bind-Value="@project.AK"
+                                    AllowClear="@true"
+                                    AllowFiltering="@true"
+                                    AllowVirtualization="@true"
+                                    Data="@users"
+                                    TextProperty="@nameof(UserDTO.Login)" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.InternalMeeting))" Width="200px" IsInEditMode="@IsEditing">
+            <HeaderTemplate>
+                    Внутренее<br />совещание
+            </HeaderTemplate>
+                <Template Context="project">
+                    <RadzenText Text="@(project.InternalMeeting)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor"
+                                   @bind-Value="project.InternalMeeting"
+                                   @oninput="@(e => project.InternalMeeting = e.Value?.ToString() ?? "")"
+                                   Style="width:100%;display: block"
+                                   Name="@(nameof(ProjectDTO.InternalMeeting))" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.ReportStatus))" Width="150px" IsInEditMode="@IsEditing">
+                <HeaderTemplate>Статус<br/>отчета</HeaderTemplate>
+                <Template Context="project">
+                    <RadzenText Text="@(project.ReportStatus)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor"
+                                   @bind-Value="project.ReportStatus"
+                                   @oninput="@(e => project.ReportStatus = e.Value?.ToString() ?? "")"
+                                   Style="width:100%;display: block"
+                                   Name="@(nameof(ProjectDTO.ReportStatus))" />
                 </EditTemplate>
             </RadzenDataGridColumn>
 
@@ -83,20 +232,128 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.TotalArea))" Title="ГПЗУ" Width="150px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.Customer))" Title="Заказчик" Width="150px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.Customer)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor"
+                                   @bind-Value="project.Customer"
+                                   @oninput="@(e => project.Customer = e.Value?.ToString() ?? "")"
+                                   Style="width:100%;display: block"
+                                   Name="@(nameof(ProjectDTO.Customer))" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.MarketingName))"  Width="200px" IsInEditMode="@IsEditing">
+                <HeaderTemplate>Маркетинговое<br />название</HeaderTemplate>
+                <Template Context="project">
+                    <RadzenText Text="@(project.MarketingName)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextBox @ref="editor"
+                                   @bind-Value="project.MarketingName"
+                                   @oninput="@(e => project.MarketingName = e.Value?.ToString() ?? "")"
+                                   Style="width:100%;display: block"
+                                   Name="@(nameof(ProjectDTO.MarketingName))" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.ObjectAddress))" Title="Адрес" Width="250px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.ObjectAddress)" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenTextArea @ref="editor"
+                                    @bind-Value="project.ObjectAddress"
+                                    @oninput="@(e => project.ObjectAddress = e.Value?.ToString() ?? "")"
+                                    Style="width:100%;display: block; min-height:50px"
+                                    Name="@(nameof(ProjectDTO.ObjectAddress))" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.TotalArea))" Width="200px" IsInEditMode="@IsEditing">
+                <HeaderTemplate>Общая<br />площадь</HeaderTemplate>
                 <Template Context="project">
                     <RadzenText Text="@(project.TotalArea?.ToString("N0"))" />
                 </Template>
                 <EditTemplate Context="project">
                     <RadzenNumeric @ref="@editor"
                                    @bind-Value="@project.TotalArea"
-                                   @oninput="@(e => 
+                                   @oninput="@(e =>
                                    {
                                        if(double.TryParse(e.Value?.ToString(), out var v))
                                          {  project.TotalArea = v;}
                                          else{project.TotalArea =0;}
                                    })"
                                    Style="width:100%;display: block" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.SaleableArea))" Width="200px" IsInEditMode="@IsEditing">
+                <HeaderTemplate>Продаваемая<br />площадь</HeaderTemplate>
+                <Template Context="project">
+                    <RadzenText Text="@(project.SaleableArea?.ToString("N0"))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenNumeric @ref="@editor"
+                                   @bind-Value="@project.SaleableArea"
+                                   @oninput="@(e =>
+                                   {
+                                       if(double.TryParse(e.Value?.ToString(), out var v))
+                                         {  project.SaleableArea = v;}
+                                         else{project.SaleableArea =0;}
+                                   })"
+                                   Style="width:100%;display: block" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.DateStartPD))" Title="Старт ПД" Width="150px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.DateStartPD == null ? "-" : project.DateStartPD.Value.ToLocalTime().ToString("yyyy.MM.dd"))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker DateFormat="yyyy.MM.dd"
+                                      @ref="@editor"
+                                      @bind-Value="@project.DateStartPD"
+                                      Style="width:100%;display: block" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.DateFirstApproval))" Title="Согласование ПД" Width="150px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.DateFirstApproval == null ? "-" : project.DateFirstApproval.Value.ToLocalTime().ToString("yyyy.MM.dd"))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker DateFormat="yyyy.MM.dd"
+                                      @ref="@editor"
+                                      @bind-Value="@project.DateFirstApproval"
+                                      Style="width:100%;display: block" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.DateStartRD))" Title="Старт РД" Width="150px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.DateStartRD == null ? "-" : project.DateStartRD.Value.ToLocalTime().ToString("yyyy.MM.dd"))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker DateFormat="yyyy.MM.dd"
+                                      @ref="@editor"
+                                      @bind-Value="@project.DateStartRD"
+                                      Style="width:100%;display: block" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.DateEndRD))" Title="Финиш РД" Width="150px" IsInEditMode="@IsEditing">
+                <Template Context="project">
+                    <RadzenText Text="@(project.DateEndRD == null ? "-" : project.DateEndRD.Value.ToLocalTime().ToString("yyyy.MM.dd"))" />
+                </Template>
+                <EditTemplate Context="project">
+                    <RadzenDatePicker DateFormat="yyyy.MM.dd"
+                                      @ref="@editor"
+                                      @bind-Value="@project.DateEndRD"
+                                      Style="width:100%;display: block" />
                 </EditTemplate>
             </RadzenDataGridColumn>
 
