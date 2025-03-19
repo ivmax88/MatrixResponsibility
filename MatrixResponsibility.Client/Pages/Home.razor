@@ -35,7 +35,6 @@ else
                 </Template>
                 <EditTemplate Context="project">
                     <RadzenTextBox @ref="editor"
-                                   @onkeydown="@(args=> KeyPressed(args))"
                                    @bind-Value="project.ProjectName"
                                    @oninput="@(e => project.ProjectName = e.Value?.ToString() ?? "")"
                                    Style="width:100%;display: block"
@@ -50,7 +49,6 @@ else
                 </Template>
                 <EditTemplate Context="project">
                     <RadzenTextBox @ref="editor"
-                                   @onkeydown="@(args=> KeyPressed(args))"
                                    @bind-Value="project.AB"
                                    @oninput="@(e => project.AB = e.Value?.ToString() ?? "")"
                                    Style="width:100%;display: block"
@@ -63,7 +61,6 @@ else
                     <RadzenText Text="@(project.GIP.Login)" />
                 </Template>
                 <EditTemplate Context="project">
-                    <span @onkeydown="@(args=> KeyPressed(args))">
                         <RadzenDropDown @ref="@editor" TValue="UserDTO"
                                         @bind-Value="@project.GIP"
                                         AllowClear="@true"
@@ -71,7 +68,6 @@ else
                                         AllowVirtualization="@true"
                                         Data="@users"
                                         TextProperty="@nameof(UserDTO.Login)" />
-                    </span>
                 </EditTemplate>
             </RadzenDataGridColumn>
 
@@ -82,7 +78,6 @@ else
                 <EditTemplate Context="project">
                     <RadzenDatePicker DateFormat="yyyy.MM.dd"
                                       @ref="@editor"
-                                      @onkeydown="@(args=> KeyPressed(args))"
                                       @bind-Value="@project.GPZUDate"
                                       Style="width:100%;display: block" />
                 </EditTemplate>
@@ -94,7 +89,6 @@ else
                 </Template>
                 <EditTemplate Context="project">
                     <RadzenNumeric @ref="@editor"
-                                   @onkeydown="@(args=> KeyPressed(args))"
                                    @bind-Value="@project.TotalArea"
                                    @oninput="@(e => 
                                    {

@@ -103,16 +103,16 @@ namespace MatrixResponsibility.Client.Pages
             grid.CancelEditRow(projectEditingOld);
         }
 
-        async Task KeyPressed(KeyboardEventArgs args)
-        {
-#if DEBUG
-            Console.WriteLine($"Key pressed: {args.Key}"); // Для отладки
-#endif
-            if (args.Key == "Enter")
-                await Update();
-            else if (args.Key == "Escape")
-                await Cancel();
-        }
+//        async Task KeyPressed(KeyboardEventArgs args)
+//        {
+//#if DEBUG
+//            Console.WriteLine($"Key pressed: {args.Key}"); // Для отладки
+//#endif
+//            if (args.Key == "Enter")
+//                await Update();
+//            else if (args.Key == "Escape")
+//                await Cancel();
+//        }
 
         protected override async Task DisposeResourcesAsync()
         {
