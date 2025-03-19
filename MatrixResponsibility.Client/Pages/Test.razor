@@ -1,0 +1,1048 @@
+﻿@page "/test"
+@inherits ApplicationComponentBase
+
+<h3>Список проектов</h3>
+
+@if (projects == null)
+{
+    <p>Загрузка...</p>
+}
+else if (projects.Count == 0)
+{
+    <p>Проекты не найдены</p>
+}
+else
+{
+    <div class="table-container">
+        <table class="projects-table">
+            <thead>
+                <tr>
+                    <th class="col-project-name">Название проекта</th>
+                    <th class="col-ab">AB</th>
+                    <th class="col-internal-meeting">Внутреннее совещание</th>
+                    <th class="col-report-status">Статус отчета</th>
+                    <th class="col-customer">Заказчик</th>
+                    <th class="col-permission">Письмо-разрешение</th>
+                    <th class="col-marketing-name">Маркетинговое название</th>
+                    <th class="col-address">Адрес объекта</th>
+                    <th class="col-date">Дата ГПЗУ</th>
+                    <th class="col-date">Дата начала ПД</th>
+                    <th class="col-date">Дата первого согласования</th>
+                    <th class="col-date">Дата начала РД</th>
+                    <th class="col-date">Дата окончания РД</th>
+                    <th class="col-area">Общая площадь</th>
+                    <th class="col-area">Продаваемая площадь</th>
+                    <th class="col-user">GIP</th>
+                    <th class="col-user">Assistant GIP</th>
+                    <th class="col-user">GAP</th>
+                    <th class="col-user">GKP</th>
+                    <th class="col-user">GP</th>
+                    <th class="col-user">EOM</th>
+                    <th class="col-user">SS</th>
+                    <th class="col-user">AK</th>
+                    <th class="col-user">Ответственный</th>
+                    <th class="col-bkp">BKP</th>
+                    <th class="col-corrections">Кол-во корректировок</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var project in projects)
+                {
+                    var projectId = project.Id;
+                    <tr>
+                        <td class="@GetCellClass(projectId, "ProjectName")" @onclick="@(() => SelectCell(projectId, "ProjectName"))" @ondblclick="@(() => StartEditing(project, "ProjectName"))">
+                            @if (IsEditing(projectId, "ProjectName"))
+                            {
+                                var key = $"{projectId}_ProjectName";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.ProjectName;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "ProjectName"))"
+                                       @onblur="@(() => SaveEdit(project, "ProjectName"))" />
+                            }
+                            else
+                            {
+                                @project.ProjectName
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "AB")" @onclick="@(() => SelectCell(projectId, "AB"))" @ondblclick="@(() => StartEditing(project, "AB"))">
+                            @if (IsEditing(projectId, "AB"))
+                            {
+                                var key = $"{projectId}_AB";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.AB;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "AB"))"
+                                       @onblur="@(() => SaveEdit(project, "AB"))" />
+                            }
+                            else
+                            {
+                                @project.AB
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "InternalMeeting")" @onclick="@(() => SelectCell(projectId, "InternalMeeting"))" @ondblclick="@(() => StartEditing(project, "InternalMeeting"))">
+                            @if (IsEditing(projectId, "InternalMeeting"))
+                            {
+                                var key = $"{projectId}_InternalMeeting";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.InternalMeeting;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "InternalMeeting"))"
+                                       @onblur="@(() => SaveEdit(project, "InternalMeeting"))" />
+                            }
+                            else
+                            {
+                                @project.InternalMeeting
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "ReportStatus")" @onclick="@(() => SelectCell(projectId, "ReportStatus"))" @ondblclick="@(() => StartEditing(project, "ReportStatus"))">
+                            @if (IsEditing(projectId, "ReportStatus"))
+                            {
+                                var key = $"{projectId}_ReportStatus";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.ReportStatus;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "ReportStatus"))"
+                                       @onblur="@(() => SaveEdit(project, "ReportStatus"))" />
+                            }
+                            else
+                            {
+                                @project.ReportStatus
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "Customer")" @onclick="@(() => SelectCell(projectId, "Customer"))" @ondblclick="@(() => StartEditing(project, "Customer"))">
+                            @if (IsEditing(projectId, "Customer"))
+                            {
+                                var key = $"{projectId}_Customer";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.Customer;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "Customer"))"
+                                       @onblur="@(() => SaveEdit(project, "Customer"))" />
+                            }
+                            else
+                            {
+                                @project.Customer
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "StartPermissionLetter")" @onclick="@(() => SelectCell(projectId, "StartPermissionLetter"))" @ondblclick="@(() => StartEditing(project, "StartPermissionLetter"))">
+                            @if (IsEditing(projectId, "StartPermissionLetter"))
+                            {
+                                var key = $"{projectId}_StartPermissionLetter";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.StartPermissionLetter;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "StartPermissionLetter"))"
+                                       @onblur="@(() => SaveEdit(project, "StartPermissionLetter"))" />
+                            }
+                            else
+                            {
+                                @project.StartPermissionLetter
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "MarketingName")" @onclick="@(() => SelectCell(projectId, "MarketingName"))" @ondblclick="@(() => StartEditing(project, "MarketingName"))">
+                            @if (IsEditing(projectId, "MarketingName"))
+                            {
+                                var key = $"{projectId}_MarketingName";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.MarketingName;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "MarketingName"))"
+                                       @onblur="@(() => SaveEdit(project, "MarketingName"))" />
+                            }
+                            else
+                            {
+                                @project.MarketingName
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "ObjectAddress")" @onclick="@(() => SelectCell(projectId, "ObjectAddress"))" @ondblclick="@(() => StartEditing(project, "ObjectAddress"))">
+                            @if (IsEditing(projectId, "ObjectAddress"))
+                            {
+                                var key = $"{projectId}_ObjectAddress";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.ObjectAddress;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "ObjectAddress"))"
+                                       @onblur="@(() => SaveEdit(project, "ObjectAddress"))" />
+                            }
+                            else
+                            {
+                                @project.ObjectAddress
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "GPZUDate")" @onclick="@(() => SelectCell(projectId, "GPZUDate"))" @ondblclick="@(() => StartEditing(project, "GPZUDate"))">
+                            @if (IsEditing(projectId, "GPZUDate"))
+                            {
+                                var key = $"{projectId}_GPZUDate";
+                                var tempValue = tempDateValues.ContainsKey(key) ? tempDateValues[key] : project.GPZUDate;
+                                <input type="date" @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "GPZUDate"))"
+                                       @onblur="@(() => SaveEdit(project, "GPZUDate"))" />
+                            }
+                            else
+                            {
+                                @project.GPZUDate?.ToString("dd.MM.yyyy")
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "DateStartPD")" @onclick="@(() => SelectCell(projectId, "DateStartPD"))" @ondblclick="@(() => StartEditing(project, "DateStartPD"))">
+                            @if (IsEditing(projectId, "DateStartPD"))
+                            {
+                                var key = $"{projectId}_DateStartPD";
+                                var tempValue = tempDateValues.ContainsKey(key) ? tempDateValues[key] : project.DateStartPD;
+                                <input type="date" @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "DateStartPD"))"
+                                       @onblur="@(() => SaveEdit(project, "DateStartPD"))" />
+                            }
+                            else
+                            {
+                                @project.DateStartPD?.ToString("dd.MM.yyyy")
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "DateFirstApproval")" @onclick="@(() => SelectCell(projectId, "DateFirstApproval"))" @ondblclick="@(() => StartEditing(project, "DateFirstApproval"))">
+                            @if (IsEditing(projectId, "DateFirstApproval"))
+                            {
+                                var key = $"{projectId}_DateFirstApproval";
+                                var tempValue = tempDateValues.ContainsKey(key) ? tempDateValues[key] : project.DateFirstApproval;
+                                <input type="date" @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "DateFirstApproval"))"
+                                       @onblur="@(() => SaveEdit(project, "DateFirstApproval"))" />
+                            }
+                            else
+                            {
+                                @project.DateFirstApproval?.ToString("dd.MM.yyyy")
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "DateStartRD")" @onclick="@(() => SelectCell(projectId, "DateStartRD"))" @ondblclick="@(() => StartEditing(project, "DateStartRD"))">
+                            @if (IsEditing(projectId, "DateStartRD"))
+                            {
+                                var key = $"{projectId}_DateStartRD";
+                                var tempValue = tempDateValues.ContainsKey(key) ? tempDateValues[key] : project.DateStartRD;
+                                <input type="date" @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "DateStartRD"))"
+                                       @onblur="@(() => SaveEdit(project, "DateStartRD"))" />
+                            }
+                            else
+                            {
+                                @project.DateStartRD?.ToString("dd.MM.yyyy")
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "DateEndRD")" @onclick="@(() => SelectCell(projectId, "DateEndRD"))" @ondblclick="@(() => StartEditing(project, "DateEndRD"))">
+                            @if (IsEditing(projectId, "DateEndRD"))
+                            {
+                                var key = $"{projectId}_DateEndRD";
+                                var tempValue = tempDateValues.ContainsKey(key) ? tempDateValues[key] : project.DateEndRD;
+                                <input type="date" @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "DateEndRD"))"
+                                       @onblur="@(() => SaveEdit(project, "DateEndRD"))" />
+                            }
+                            else
+                            {
+                                @project.DateEndRD?.ToString("dd.MM.yyyy")
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "TotalArea")" @onclick="@(() => SelectCell(projectId, "TotalArea"))" @ondblclick="@(() => StartEditing(project, "TotalArea"))">
+                            @if (IsEditing(projectId, "TotalArea"))
+                            {
+                                var key = $"{projectId}_TotalArea";
+                                var tempValue = tempDoubleValues.ContainsKey(key) ? tempDoubleValues[key] : project.TotalArea;
+                                <input type="number" step="0.01" @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "TotalArea"))"
+                                       @onblur="@(() => SaveEdit(project, "TotalArea"))" />
+                            }
+                            else
+                            {
+                                @project.TotalArea
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "SaleableArea")" @onclick="@(() => SelectCell(projectId, "SaleableArea"))" @ondblclick="@(() => StartEditing(project, "SaleableArea"))">
+                            @if (IsEditing(projectId, "SaleableArea"))
+                            {
+                                var key = $"{projectId}_SaleableArea";
+                                var tempValue = tempDoubleValues.ContainsKey(key) ? tempDoubleValues[key] : project.SaleableArea;
+                                <input type="number" step="0.01" @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "SaleableArea"))"
+                                       @onblur="@(() => SaveEdit(project, "SaleableArea"))" />
+                            }
+                            else
+                            {
+                                @project.SaleableArea
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "GIP")" @onclick="@(() => SelectCell(projectId, "GIP"))" @ondblclick="@(() => StartEditing(project, "GIP"))">
+                            @if (IsEditing(projectId, "GIP"))
+                            {
+                                var key = $"{projectId}_GIP";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.GIP?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "GIP"))"
+                                        @onblur="@(() => SaveEdit(project, "GIP"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.GIP?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "AssistantGIP")" @onclick="@(() => SelectCell(projectId, "AssistantGIP"))" @ondblclick="@(() => StartEditing(project, "AssistantGIP"))">
+                            @if (IsEditing(projectId, "AssistantGIP"))
+                            {
+                                var key = $"{projectId}_AssistantGIP";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.AssistantGIP?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "AssistantGIP"))"
+                                        @onblur="@(() => SaveEdit(project, "AssistantGIP"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.AssistantGIP?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "GAP")" @onclick="@(() => SelectCell(projectId, "GAP"))" @ondblclick="@(() => StartEditing(project, "GAP"))">
+                            @if (IsEditing(projectId, "GAP"))
+                            {
+                                var key = $"{projectId}_GAP";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.GAP?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "GAP"))"
+                                        @onblur="@(() => SaveEdit(project, "GAP"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.GAP?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "GKP")" @onclick="@(() => SelectCell(projectId, "GKP"))" @ondblclick="@(() => StartEditing(project, "GKP"))">
+                            @if (IsEditing(projectId, "GKP"))
+                            {
+                                var key = $"{projectId}_GKP";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.GKP?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "GKP"))"
+                                        @onblur="@(() => SaveEdit(project, "GKP"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.GKP?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "GP")" @onclick="@(() => SelectCell(projectId, "GP"))" @ondblclick="@(() => StartEditing(project, "GP"))">
+                            @if (IsEditing(projectId, "GP"))
+                            {
+                                var key = $"{projectId}_GP";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.GP?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "GP"))"
+                                        @onblur="@(() => SaveEdit(project, "GP"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.GP?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "EOM")" @onclick="@(() => SelectCell(projectId, "EOM"))" @ondblclick="@(() => StartEditing(project, "EOM"))">
+                            @if (IsEditing(projectId, "EOM"))
+                            {
+                                var key = $"{projectId}_EOM";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.EOM?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "EOM"))"
+                                        @onblur="@(() => SaveEdit(project, "EOM"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.EOM?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "SS")" @onclick="@(() => SelectCell(projectId, "SS"))" @ondblclick="@(() => StartEditing(project, "SS"))">
+                            @if (IsEditing(projectId, "SS"))
+                            {
+                                var key = $"{projectId}_SS";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.SS?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "SS"))"
+                                        @onblur="@(() => SaveEdit(project, "SS"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.SS?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "AK")" @onclick="@(() => SelectCell(projectId, "AK"))" @ondblclick="@(() => StartEditing(project, "AK"))">
+                            @if (IsEditing(projectId, "AK"))
+                            {
+                                var key = $"{projectId}_AK";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.AK?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "AK"))"
+                                        @onblur="@(() => SaveEdit(project, "AK"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.AK?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "Responsible")" @onclick="@(() => SelectCell(projectId, "Responsible"))" @ondblclick="@(() => StartEditing(project, "Responsible"))">
+                            @if (IsEditing(projectId, "Responsible"))
+                            {
+                                var key = $"{projectId}_Responsible";
+                                var tempValue = tempIntValues.ContainsKey(key) ? tempIntValues[key] : (project.Responsible?.Id ?? 0);
+                                <select @ref="selectElement" @bind="tempValue"
+                                        @onkeydown="@(e => HandleKeyPress(e, project, "Responsible"))"
+                                        @onblur="@(() => SaveEdit(project, "Responsible"))">
+                                    <option value="0">Не выбрано</option>
+                                    @foreach (var user in users)
+                                    {
+                                        <option value="@user.Id">@user.Login</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                @project.Responsible?.Login
+                            }
+                        </td>
+                        <td class="@GetCellClass(projectId, "BKP")" @onclick="@(() => SelectCell(projectId, "BKP"))" @ondblclick="@(() => StartEditing(project, "BKP"))">
+                            @if (IsEditing(projectId, "BKP"))
+                            {
+                                var key = $"{projectId}_BKP";
+                                var tempValue = tempStringValues.ContainsKey(key) ? tempStringValues[key] : project.BKP?.Name;
+                                <input @ref="inputElement" @bind-value="tempValue"
+                                       @bind-value:event="oninput"
+                                       @onkeydown="@(e => HandleKeyPress(e, project, "BKP"))"
+                                       @onblur="@(() => SaveEdit(project, "BKP"))" />
+                            }
+                            else
+                            {
+                                @project.BKP?.Name
+                            }
+                        </td>
+                        <td class="col-corrections">@project.Corrections?.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<style>
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .projects-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+        .projects-table th, .projects-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+            overflow: hidden;
+        }
+
+        .projects-table th {
+            resize: horizontal;
+            overflow: auto;
+            min-width: 50px;
+        }
+
+        .projects-table input, .projects-table select {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .projects-table td:hover {
+            cursor: pointer;
+            background-color: #f5f5f5;
+        }
+
+    .selected-cell {
+        background-color: #d3e0ea !important; /* Цвет выделения */
+    }
+
+    .col-project-name {
+        width: 200px;
+    }
+
+    .col-ab {
+        width: 100px;
+    }
+
+    .col-internal-meeting {
+        width: 150px;
+    }
+
+    .col-report-status {
+        width: 150px;
+    }
+
+    .col-customer {
+        width: 200px;
+    }
+
+    .col-permission {
+        width: 200px;
+    }
+
+    .col-marketing-name {
+        width: 200px;
+    }
+
+    .col-address {
+        width: 300px;
+    }
+
+    .col-date {
+        width: 150px;
+    }
+
+    .col-area {
+        width: 150px;
+    }
+
+    .col-user {
+        width: 200px;
+    }
+
+    .col-bkp {
+        width: 200px;
+    }
+
+    .col-corrections {
+        width: 150px;
+    }
+</style>
+
+@code {
+    private Dictionary<string, bool> editingStates = new();
+    private Dictionary<string, string> tempStringValues = new();
+    private Dictionary<string, DateTime?> tempDateValues = new();
+    private Dictionary<string, double?> tempDoubleValues = new();
+    private Dictionary<string, int> tempIntValues = new();
+    private string? currentlyEditingKey; // Хранит ключ текущей редактируемой ячейки
+    private string? selectedCellKey; // Хранит ключ выделенной ячейки
+    private ElementReference inputElement; // Для фокуса на <input>
+    private ElementReference selectElement; // Для фокуса на <select>
+
+    // Для хранения скопированного значения
+    private object? copiedValue;
+    private string? copiedFieldName;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Регистрируем обработчики клавиш через JavaScript
+            await JSRuntime.InvokeVoidAsync("registerKeyHandlers", DotNetObjectReference.Create(this));
+        }
+    }
+
+    [JSInvokable]
+    public void HandleCopy()
+    {
+        if (selectedCellKey == null) return;
+
+        var projectId = int.Parse(selectedCellKey.Split('_')[0]);
+        var fieldName = selectedCellKey.Split('_')[1];
+        var project = projects.FirstOrDefault(p => p.Id == projectId);
+        if (project == null) return;
+
+        copiedFieldName = fieldName;
+        copiedValue = GetFieldValue(project, fieldName);
+    }
+
+    [JSInvokable]
+    public void HandlePaste()
+    {
+        if (selectedCellKey == null || copiedValue == null || copiedFieldName == null) return;
+
+        var targetProjectId = int.Parse(selectedCellKey.Split('_')[0]);
+        var targetFieldName = selectedCellKey.Split('_')[1];
+        var targetProject = projects.FirstOrDefault(p => p.Id == targetProjectId);
+        if (targetProject == null) return;
+
+        // Проверяем, можно ли скопировать
+        if (CanCopyField(copiedFieldName, targetFieldName))
+        {
+            SetFieldValue(targetProject, targetFieldName, copiedValue);
+            Update(targetProject);
+            StateHasChanged();
+        }
+    }
+
+    private bool IsEditing(int projectId, string fieldName)
+    {
+        string key = $"{projectId}_{fieldName}";
+        return editingStates.ContainsKey(key) && editingStates[key];
+    }
+
+    private string GetCellClass(int projectId, string fieldName)
+    {
+        string key = $"{projectId}_{fieldName}";
+        return selectedCellKey == key ? "selected-cell" : "";
+    }
+
+    private void SelectCell(int projectId, string fieldName)
+    {
+        string key = $"{projectId}_{fieldName}";
+        if (selectedCellKey == key)
+        {
+            // Если ячейка уже выделена, снимаем выделение
+            selectedCellKey = null;
+        }
+        else
+        {
+            selectedCellKey = key;
+        }
+        StateHasChanged();
+    }
+
+    private async Task StartEditing(ProjectDTO project, string fieldName)
+    {
+        string key = $"{project.Id}_{fieldName}";
+
+        // Если уже редактируется другая ячейка, сохраняем её
+        if (currentlyEditingKey != null && currentlyEditingKey != key)
+        {
+            var previousKey = currentlyEditingKey;
+            var previousProjectId = int.Parse(previousKey.Split('_')[0]);
+            var previousFieldName = previousKey.Split('_')[1];
+            var previousProject = projects.FirstOrDefault(p => p.Id == previousProjectId);
+            if (previousProject != null)
+            {
+                SaveEdit(previousProject, previousFieldName);
+            }
+        }
+
+        // Начинаем редактирование новой ячейки
+        if (!editingStates.ContainsKey(key) || !editingStates[key])
+        {
+            editingStates[key] = true;
+            currentlyEditingKey = key;
+
+            // Инициализация временных значений в зависимости от типа поля
+            switch (fieldName)
+            {
+                case "ProjectName":
+                    tempStringValues[key] = project.ProjectName ?? string.Empty;
+                    break;
+                case "AB":
+                    tempStringValues[key] = project.AB ?? string.Empty;
+                    break;
+                case "InternalMeeting":
+                    tempStringValues[key] = project.InternalMeeting ?? string.Empty;
+                    break;
+                case "ReportStatus":
+                    tempStringValues[key] = project.ReportStatus ?? string.Empty;
+                    break;
+                case "Customer":
+                    tempStringValues[key] = project.Customer ?? string.Empty;
+                    break;
+                case "StartPermissionLetter":
+                    tempStringValues[key] = project.StartPermissionLetter ?? string.Empty;
+                    break;
+                case "MarketingName":
+                    tempStringValues[key] = project.MarketingName ?? string.Empty;
+                    break;
+                case "ObjectAddress":
+                    tempStringValues[key] = project.ObjectAddress ?? string.Empty;
+                    break;
+                case "GPZUDate":
+                    tempDateValues[key] = project.GPZUDate;
+                    break;
+                case "DateStartPD":
+                    tempDateValues[key] = project.DateStartPD;
+                    break;
+                case "DateFirstApproval":
+                    tempDateValues[key] = project.DateFirstApproval;
+                    break;
+                case "DateStartRD":
+                    tempDateValues[key] = project.DateStartRD;
+                    break;
+                case "DateEndRD":
+                    tempDateValues[key] = project.DateEndRD;
+                    break;
+                case "TotalArea":
+                    tempDoubleValues[key] = project.TotalArea;
+                    break;
+                case "SaleableArea":
+                    tempDoubleValues[key] = project.SaleableArea;
+                    break;
+                case "GIP":
+                    tempIntValues[key] = project.GIP?.Id ?? 0;
+                    break;
+                case "AssistantGIP":
+                    tempIntValues[key] = project.AssistantGIP?.Id ?? 0;
+                    break;
+                case "GAP":
+                    tempIntValues[key] = project.GAP?.Id ?? 0;
+                    break;
+                case "GKP":
+                    tempIntValues[key] = project.GKP?.Id ?? 0;
+                    break;
+                case "GP":
+                    tempIntValues[key] = project.GP?.Id ?? 0;
+                    break;
+                case "EOM":
+                    tempIntValues[key] = project.EOM?.Id ?? 0;
+                    break;
+                case "SS":
+                    tempIntValues[key] = project.SS?.Id ?? 0;
+                    break;
+                case "AK":
+                    tempIntValues[key] = project.AK?.Id ?? 0;
+                    break;
+                case "Responsible":
+                    tempIntValues[key] = project.Responsible?.Id ?? 0;
+                    break;
+                case "BKP":
+                    tempStringValues[key] = project.BKP?.Name ?? string.Empty;
+                    break;
+            }
+
+            // Устанавливаем фокус на элемент после рендеринга
+            await Task.Delay(1); // Небольшая задержка для рендеринга
+            if (fieldName is "GIP" or "AssistantGIP" or "GAP" or "GKP" or "GP" or "EOM" or "SS" or "AK" or "Responsible")
+            {
+                await selectElement.FocusAsync();
+            }
+            else
+            {
+                await inputElement.FocusAsync();
+            }
+        }
+        StateHasChanged();
+    }
+
+    private void SaveEdit(ProjectDTO project, string fieldName)
+    {
+        string key = $"{project.Id}_{fieldName}";
+        if (editingStates.ContainsKey(key) && editingStates[key])
+        {
+            switch (fieldName)
+            {
+                case "ProjectName":
+                    project.ProjectName = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "AB":
+                    project.AB = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "InternalMeeting":
+                    project.InternalMeeting = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "ReportStatus":
+                    project.ReportStatus = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "Customer":
+                    project.Customer = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "StartPermissionLetter":
+                    project.StartPermissionLetter = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "MarketingName":
+                    project.MarketingName = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "ObjectAddress":
+                    project.ObjectAddress = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+                case "GPZUDate":
+                    project.GPZUDate = tempDateValues[key];
+                    tempDateValues.Remove(key);
+                    break;
+                case "DateStartPD":
+                    project.DateStartPD = tempDateValues[key];
+                    tempDateValues.Remove(key);
+                    break;
+                case "DateFirstApproval":
+                    project.DateFirstApproval = tempDateValues[key];
+                    tempDateValues.Remove(key);
+                    break;
+                case "DateStartRD":
+                    project.DateStartRD = tempDateValues[key];
+                    tempDateValues.Remove(key);
+                    break;
+                case "DateEndRD":
+                    project.DateEndRD = tempDateValues[key];
+                    tempDateValues.Remove(key);
+                    break;
+                case "TotalArea":
+                    project.TotalArea = tempDoubleValues[key];
+                    tempDoubleValues.Remove(key);
+                    break;
+                case "SaleableArea":
+                    project.SaleableArea = tempDoubleValues[key];
+                    tempDoubleValues.Remove(key);
+                    break;
+                case "GIP":
+                case "AssistantGIP":
+                case "GAP":
+                case "GKP":
+                case "GP":
+                case "EOM":
+                case "SS":
+                case "AK":
+                case "Responsible":
+                    var userId = tempIntValues[key];
+                    var selectedUser = users.FirstOrDefault(u => u.Id == userId);
+                    switch (fieldName)
+                    {
+                        case "GIP": project.GIP = selectedUser; break;
+                        case "AssistantGIP": project.AssistantGIP = selectedUser; break;
+                        case "GAP": project.GAP = selectedUser; break;
+                        case "GKP": project.GKP = selectedUser; break;
+                        case "GP": project.GP = selectedUser; break;
+                        case "EOM": project.EOM = selectedUser; break;
+                        case "SS": project.SS = selectedUser; break;
+                        case "AK": project.AK = selectedUser; break;
+                        case "Responsible": project.Responsible = selectedUser; break;
+                    }
+                    tempIntValues.Remove(key);
+                    break;
+                case "BKP":
+                    project.BKP ??= new BKPDTO();
+                    project.BKP.Name = tempStringValues[key];
+                    tempStringValues.Remove(key);
+                    break;
+            }
+            editingStates[key] = false;
+            currentlyEditingKey = null; // Сбрасываем текущую редактируемую ячейку
+            Update(project);
+        }
+        StateHasChanged();
+    }
+
+    private void CancelEdit(int projectId, string fieldName)
+    {
+        string key = $"{projectId}_{fieldName}";
+        if (editingStates.ContainsKey(key) && editingStates[key])
+        {
+            editingStates[key] = false;
+            tempStringValues.Remove(key);
+            tempDateValues.Remove(key);
+            tempDoubleValues.Remove(key);
+            tempIntValues.Remove(key);
+            currentlyEditingKey = null; // Сбрасываем текущую редактируемую ячейку
+        }
+        StateHasChanged();
+    }
+
+    private void HandleKeyPress(KeyboardEventArgs e, ProjectDTO project, string fieldName)
+    {
+        if (e.Key == "Enter")
+        {
+            SaveEdit(project, fieldName);
+        }
+        else if (e.Key == "Escape")
+        {
+            CancelEdit(project.Id, fieldName);
+        }
+    }
+
+    private bool CanCopyField(string sourceField, string targetField)
+    {
+        // Определяем типы полей
+        var stringFields = new[] { "ProjectName", "AB", "InternalMeeting", "ReportStatus", "Customer", "StartPermissionLetter", "MarketingName", "ObjectAddress", "BKP" };
+        var dateFields = new[] { "GPZUDate", "DateStartPD", "DateFirstApproval", "DateStartRD", "DateEndRD" };
+        var doubleFields = new[] { "TotalArea", "SaleableArea" };
+        var userFields = new[] { "GIP", "AssistantGIP", "GAP", "GKP", "GP", "EOM", "SS", "AK", "Responsible" };
+
+        // Проверяем, принадлежат ли поля к одной категории
+        if (stringFields.Contains(sourceField) && stringFields.Contains(targetField))
+            return true;
+        if (dateFields.Contains(sourceField) && dateFields.Contains(targetField))
+            return true;
+        if (doubleFields.Contains(sourceField) && doubleFields.Contains(targetField))
+            return true;
+        if (userFields.Contains(sourceField) && userFields.Contains(targetField))
+            return true;
+
+        return false;
+    }
+
+    private object? GetFieldValue(ProjectDTO project, string fieldName)
+    {
+        return fieldName switch
+        {
+            "ProjectName" => project.ProjectName,
+            "AB" => project.AB,
+            "InternalMeeting" => project.InternalMeeting,
+            "ReportStatus" => project.ReportStatus,
+            "Customer" => project.Customer,
+            "StartPermissionLetter" => project.StartPermissionLetter,
+            "MarketingName" => project.MarketingName,
+            "ObjectAddress" => project.ObjectAddress,
+            "GPZUDate" => project.GPZUDate,
+            "DateStartPD" => project.DateStartPD,
+            "DateFirstApproval" => project.DateFirstApproval,
+            "DateStartRD" => project.DateStartRD,
+            "DateEndRD" => project.DateEndRD,
+            "TotalArea" => project.TotalArea,
+            "SaleableArea" => project.SaleableArea,
+            "GIP" => project.GIP,
+            "AssistantGIP" => project.AssistantGIP,
+            "GAP" => project.GAP,
+            "GKP" => project.GKP,
+            "GP" => project.GP,
+            "EOM" => project.EOM,
+            "SS" => project.SS,
+            "AK" => project.AK,
+            "Responsible" => project.Responsible,
+            "BKP" => project.BKP,
+            _ => null
+        };
+    }
+
+    private void SetFieldValue(ProjectDTO project, string fieldName, object? value)
+    {
+        switch (fieldName)
+        {
+            case "ProjectName":
+                project.ProjectName = (string?)value;
+                break;
+            case "AB":
+                project.AB = (string?)value;
+                break;
+            case "InternalMeeting":
+                project.InternalMeeting = (string?)value;
+                break;
+            case "ReportStatus":
+                project.ReportStatus = (string?)value;
+                break;
+            case "Customer":
+                project.Customer = (string?)value;
+                break;
+            case "StartPermissionLetter":
+                project.StartPermissionLetter = (string?)value;
+                break;
+            case "MarketingName":
+                project.MarketingName = (string?)value;
+                break;
+            case "ObjectAddress":
+                project.ObjectAddress = (string?)value;
+                break;
+            case "GPZUDate":
+                project.GPZUDate = (DateTime?)value;
+                break;
+            case "DateStartPD":
+                project.DateStartPD = (DateTime?)value;
+                break;
+            case "DateFirstApproval":
+                project.DateFirstApproval = (DateTime?)value;
+                break;
+            case "DateStartRD":
+                project.DateStartRD = (DateTime?)value;
+                break;
+            case "DateEndRD":
+                project.DateEndRD = (DateTime?)value;
+                break;
+            case "TotalArea":
+                project.TotalArea = (double?)value;
+                break;
+            case "SaleableArea":
+                project.SaleableArea = (double?)value;
+                break;
+            case "GIP":
+                project.GIP = (UserDTO?)value;
+                break;
+            case "AssistantGIP":
+                project.AssistantGIP = (UserDTO?)value;
+                break;
+            case "GAP":
+                project.GAP = (UserDTO?)value;
+                break;
+            case "GKP":
+                project.GKP = (UserDTO?)value;
+                break;
+            case "GP":
+                project.GP = (UserDTO?)value;
+                break;
+            case "EOM":
+                project.EOM = (UserDTO?)value;
+                break;
+            case "SS":
+                project.SS = (UserDTO?)value;
+                break;
+            case "AK":
+                project.AK = (UserDTO?)value;
+                break;
+            case "Responsible":
+                project.Responsible = (UserDTO?)value;
+                break;
+            case "BKP":
+                project.BKP = (BKPDTO?)value;
+                break;
+        }
+    }
+
+    private void Update(ProjectDTO project)
+    {
+        // Здесь ваша логика сохранения данных в базе
+        // Например: await ProjectService.UpdateProjectAsync(project);
+        StateHasChanged();
+    }
+}

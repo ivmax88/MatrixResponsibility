@@ -15,6 +15,7 @@ namespace MatrixResponsibility.Client.Pages
         [Inject] public IJSRuntime JSRuntime { get; set; }
 
         private ObservableCollection<ProjectDTO>? projects;
+        private List<UserDTO> users;
         private RadzenDataGrid<ProjectDTO> grid;
         private DotNetObjectReference<Home> dotNetObjRef;
         private ProjectDTO currentEditedProject; // Одиночный объект для текущего редактируемого проекта
@@ -30,6 +31,8 @@ namespace MatrixResponsibility.Client.Pages
 
             var tempProjects = await MainHubService.GetAllProjects(cancellationToken);
             projects = new ObservableCollection<ProjectDTO>(tempProjects);
+
+            users = await MainHubService.GetAllUsers(cancellationToken);
 
             await JSRuntime.InvokeVoidAsync("initializeDotNetHelper", dotNetObjRef);
         }

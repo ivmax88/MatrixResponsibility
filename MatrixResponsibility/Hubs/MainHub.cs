@@ -104,6 +104,14 @@ namespace MatrixResponsibility.Hubs
             return r??[];
         }
 
+        public async Task<List<UserDTO>> GetAllUsers()
+        {
+            var r = await appDbContext.Users.Select(x => new UserDTO(x))
+                .ToListAsync(Context.ConnectionAborted);
+
+            return r;
+        }
+
         public async Task ChangeProjectInfo(ProjectDTO? p)
         {
             if (p == null) return;

@@ -11,6 +11,7 @@
         public const string ProjectChanged = nameof(ProjectChanged);
         public const string ChangeProjectInfo = nameof(ChangeProjectInfo);
         public const string GetAllProjects = nameof(GetAllProjects);
+        public const string GetAllUsers = nameof(GetAllUsers);
         public const string ConnectedClientsCount = nameof(ConnectedClientsCount);
     }
 }

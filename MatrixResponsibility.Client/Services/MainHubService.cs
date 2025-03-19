@@ -92,17 +92,41 @@ namespace MatrixResponsibility.Client.Services
             try
             {
                 var r = await _connection.InvokeAsync<List<ProjectDTO>>(str.GetAllProjects, ct);
-                _logger.LogInformation("GetAllProjects");
+                _logger.LogInformation(str.GetAllProjects);
                 return r;
             }
             catch (OperationCanceledException)
             {
-                _logger.LogInformation("GetAllProjects operation was canceled.");
+                _logger.LogInformation($"{str.GetAllProjects} operation was canceled.");
                 throw;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error changing project via SignalR.");
+                _logger.LogError(ex, $"Error {str.GetAllProjects} via SignalR.");
+                throw;
+            }
+        }
+
+        public async Task<List<UserDTO>> GetAllUsers(CancellationToken ct)
+        {
+            if (_connection == null || _connection.State == HubConnectionState.Disconnected)
+            {
+                throw new InvalidOperationException("SignalR connection is not established.");
+            }
+            try
+            {
+                var r = await _connection.InvokeAsync<List<UserDTO>>(str.GetAllUsers, ct);
+                _logger.LogInformation(str.GetAllUsers);
+                return r;
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation($"{str.GetAllUsers} operation was canceled.");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error {str.GetAllUsers} via SignalR.");
                 throw;
             }
         }

@@ -21,3 +21,16 @@ window.setCursorToEnd = (element) => {
         console.error('Element is null');
     }
 };
+
+window.registerKeyHandlers = (dotNetObject) => {
+    document.addEventListener('keydown', (event) => {
+        if (event.ctrlKey && event.key === 'c') {
+            event.preventDefault();
+            dotNetObject.invokeMethodAsync('HandleCopy');
+        }
+        if (event.ctrlKey && event.key === 'v') {
+            event.preventDefault();
+            dotNetObject.invokeMethodAsync('HandlePaste');
+        }
+    });
+};
