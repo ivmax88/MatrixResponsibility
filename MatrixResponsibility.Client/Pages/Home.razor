@@ -54,7 +54,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GIP.Login))" Title="ГИП" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.GIP.Login" Title="ГИП" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.GIP.Login)" />
                 </Template>
@@ -69,7 +69,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.AssistantGIP.Login))" Title="ПомГИП" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.AssistantGIP.Login" Title="ПомГИП" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.AssistantGIP.Login)" />
                 </Template>
@@ -84,7 +84,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GAP.Login))" Title="ГАП" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.GAP.Login" Title="ГАП" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.GAP.Login)" />
                 </Template>
@@ -99,7 +99,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GKP.Login))" Title="ГКП" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.GKP.Login" Title="ГКП" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.GKP.Login)" />
                 </Template>
@@ -130,7 +130,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.GP.Login))" Title="ГП" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.GP.Login" Title="ГП" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.GP.Login)" />
                 </Template>
@@ -145,7 +145,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.EOM.Login))" Title="ЭОМ" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.EOM.Login" Title="ЭОМ" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.EOM.Login)" />
                 </Template>
@@ -160,7 +160,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.SS.Login))" Title="СС" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.SS.Login" Title="СС" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.SS.Login)" />
                 </Template>
@@ -175,7 +175,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.AK.Login))" Title="АК" Width="120px" IsInEditMode="@IsEditing">
+            <RadzenDataGridColumn TItem="ProjectDTO" Property="ProjectDTO.AK.Login" Title="АК" Width="120px" IsInEditMode="@IsEditing">
                 <Template Context="project">
                     <RadzenText Text="@(project.AK.Login)" />
                 </Template>
@@ -272,7 +272,7 @@ else
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.TotalArea))" Width="200px" IsInEditMode="@IsEditing">
+            @* <RadzenDataGridColumn TItem="ProjectDTO" Property="@(nameof(ProjectDTO.TotalArea))" Width="200px" IsInEditMode="@IsEditing">
                 <HeaderTemplate>Общая<br />площадь</HeaderTemplate>
                 <Template Context="project">
                     <RadzenText Text="@(project.TotalArea?.ToString("N0"))" />
@@ -355,7 +355,7 @@ else
                                       @bind-Value="@project.DateEndRD"
                                       Style="width:100%;display: block" />
                 </EditTemplate>
-            </RadzenDataGridColumn>
+            </RadzenDataGridColumn> *@
 
         </Columns>
 
